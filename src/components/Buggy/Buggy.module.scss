@@ -1,0 +1,12 @@
+@import "../../assets/styles/mixins";
+
+.buggy {
+  @include button;
+  transform: skewY(0);
+
+  &:hover {
+    //background: var(--red-color);
+    transform: skewY(10deg);
+    filter: invert(1);
+  }
+}
