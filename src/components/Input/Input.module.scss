@@ -1,0 +1,41 @@
+.search {
+  height: 100%;
+  font-size: 1.4rem;
+  display: flex;
+  border-radius: 2rem;
+  background: #fff;
+  transition: all 0.3s;
+
+  &:focus-within {
+    box-shadow: 0 0 10px #fff;
+  }
+}
+
+.input {
+  padding: 0.6rem;
+  background-color: transparent;
+  border: none;
+  border-radius: 2rem;
+
+  &:hover {
+    outline: none;
+    border: none;
+  }
+
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+.button {
+  font-size: inherit;
+  cursor: pointer;
+  padding: 0.6rem;
+  border: none;
+  background-color: transparent;
+  transition: all 0.3s;
+
+  &:hover {
+    color: #089af4;
+  }
+}
