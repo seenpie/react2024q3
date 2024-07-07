@@ -1,0 +1,56 @@
+@import "../../assets/styles/mixins.scss";
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  //height: 100%;
+  gap: 1rem;
+}
+
+.button_back {
+  @include button;
+  width: fit-content;
+
+  &:hover {
+    transform: translateX(-5px);
+    filter: invert(1);
+  }
+}
+
+.pokemon {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  overflow: hidden;
+  background: #000;
+  width: fit-content;
+  border-radius: 15px;
+  max-width: 1000px;
+
+  &__wrapper {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.image {
+  padding: 10px;
+  //border-radius: 15px 0 0 15px;
+  background: #fff;
+}
+
+.information {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #fff;
+  padding: 1rem;
+  font-size: 1.4rem;
+  border-radius: 0 15px 15px 0;
+
+  &__name {
+    > h2 {
+      font-size: 3rem;
+    }
+  }
+}
