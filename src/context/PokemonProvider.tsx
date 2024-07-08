@@ -17,15 +17,28 @@ class PokemonProvider extends Component<
     this.state = {
       selectedPokemon: null,
       deleteSelectedPokemon: this.deleteSelectedPokemon,
-      selectPokemon: this.selectPokemon
+      selectPokemon: this.selectPokemon,
+      loading: false,
+      error: ""
     };
   }
 
   selectPokemon = async (name: string) => {
+    this.setState((prevState) => ({ ...prevState, loading: true }));
     const pokemon = await getPokemonByName(name);
-    console.log(pokemon);
-    this.setState({ selectedPokemon: pokemon });
+    this.setState({
+      selectedPokemon: pokemon,
+      loading: false,
+      error: pokemon ? "" : `${name} not found`
+    });
+    if (!pokemon) {
+      this.deleteError(2000);
+    }
     return !!pokemon;
+  };
+
+  deleteError = (ms: number): void => {
+    setTimeout(() => this.setState({ error: "" }), ms);
   };
 
   deleteSelectedPokemon = () => {
@@ -33,12 +46,18 @@ class PokemonProvider extends Component<
   };
 
   render() {
-    const { selectedPokemon } = this.state;
+    const { selectedPokemon, loading, error } = this.state;
     const { selectPokemon, deleteSelectedPokemon } = this;
 
     return (
       <PokemonContext.Provider
-        value={{ selectPokemon, deleteSelectedPokemon, selectedPokemon }}
+        value={{
+          selectPokemon,
+          deleteSelectedPokemon,
+          selectedPokemon,
+          loading,
+          error
+        }}
       >
         {this.props.children}
       </PokemonContext.Provider>
