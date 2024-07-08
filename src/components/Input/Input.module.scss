@@ -5,6 +5,8 @@
   border-radius: 2rem;
   background: #fff;
   transition: all 0.3s;
+  z-index: 1;
+  position: relative;
 
   &:focus-within {
     box-shadow: 0 0 10px #fff;
