@@ -30,7 +30,6 @@ class Header extends Component<IHeaderProps, IHeaderState> {
       localStorage.setItem("term", value);
       this.setState({ inputValue: "" });
     }
-    console.log("handleSearch");
   };
 
   handleInput = (event: FormEvent): void => {
