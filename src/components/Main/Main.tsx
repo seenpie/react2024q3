@@ -16,8 +16,8 @@ interface IMainState {
     next: string | null;
     previous: string | null;
   };
-  loading: boolean;
   selectedCard: IPokemonData | null;
+  loading: boolean;
 }
 
 class Main extends Component<object, IMainState> {
@@ -43,7 +43,6 @@ class Main extends Component<object, IMainState> {
         this.state.offset,
         this.state.limit
       );
-      // console.log(response);
       if (response) {
         this.setState((prevState) => ({
           ...prevState,
@@ -59,23 +58,21 @@ class Main extends Component<object, IMainState> {
   }
 
   selectCard = async (name: string) => {
-    this.setState((prevState) => ({ ...prevState, loading: true }));
     const { selectPokemon } = this.context;
     await selectPokemon(name);
-    this.setState((prevState) => ({
-      ...prevState,
-      loading: false
-    }));
   };
 
   render() {
-    if (this.state.loading) return <Loader />;
+    const { loading, selectedPokemon } = this.context;
+    const { cards, totalCards, loading: stateLoading } = this.state;
 
-    if (this.context.selectedPokemon) {
+    if (loading || stateLoading) return <Loader />;
+
+    if (selectedPokemon) {
       return (
         <main className={classes.main}>
           <Detail
-            data={this.context.selectedPokemon}
+            data={selectedPokemon}
             onClick={this.context.deleteSelectedPokemon}
           />
         </main>
@@ -85,9 +82,9 @@ class Main extends Component<object, IMainState> {
     return (
       <main className={classes.main}>
         <Cards
-          cards={this.state.cards}
-          totalCards={this.state.totalCards ?? 0}
-          cardsOnPage={this.state.cards.length}
+          cards={cards}
+          totalCards={totalCards ?? 0}
+          cardsOnPage={cards.length}
           onClick={this.selectCard}
         />
       </main>
