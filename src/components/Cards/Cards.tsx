@@ -20,7 +20,6 @@ class Cards extends Component<ICardsProps, object> {
       <div className={classes.wrapper}>
         <section className={classes.text}>
           <h2>total: {this.props.totalCards}</h2>
-          {/*<h2>cards on page: {this.props.cardsOnPage}</h2>*/}
         </section>
         <section className={classes.cards}>
           {this.props.cards.map((card, i) => (
@@ -28,7 +27,6 @@ class Cards extends Component<ICardsProps, object> {
               key={i}
               name={card.name}
               onClick={() => this.props.onClick(card.name)}
-              // className={i % 5 == 0 ? classes.grid_span : ""}
             />
           ))}
         </section>
