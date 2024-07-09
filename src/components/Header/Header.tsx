@@ -21,6 +21,12 @@ class Header extends Component<IHeaderProps, IHeaderState> {
     };
   }
 
+  componentDidMount() {
+    if (this.state.inputValue) {
+      this.handleSearch();
+    }
+  }
+
   handleSearch = async (): Promise<void> => {
     if (!this.state.inputValue) return;
     const { selectPokemon } = this.context;
@@ -28,7 +34,6 @@ class Header extends Component<IHeaderProps, IHeaderState> {
     const isFound = await selectPokemon(value);
     if (isFound) {
       localStorage.setItem("term", value);
-      this.setState({ inputValue: "" });
     }
   };
 
