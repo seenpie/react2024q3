@@ -1,68 +1,66 @@
-import { Component, ReactNode } from "react";
-import { IPokemonContext, PokemonContext } from "./PokemonContext.tsx";
-import { getPokemonByName } from "../api/api.ts";
+import { ReactNode, useCallback, useEffect, useState } from "react";
+import { PokemonContext } from "./PokemonContext.tsx";
+import { getPokemonByName, IPokemonData } from "../api/api.ts";
 
-interface IPokemonProviderProps {
+interface PokemonProviderProps {
   children: ReactNode;
 }
 
-interface IPokemonProviderState extends IPokemonContext {}
+function PokemonProvider({ children }: PokemonProviderProps) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [selectedPokemon, setSelectedPokemon] = useState<IPokemonData | null>(
+    null
+  );
 
-class PokemonProvider extends Component<
-  IPokemonProviderProps,
-  IPokemonProviderState
-> {
-  constructor(props: IPokemonProviderProps) {
-    super(props);
-    this.state = {
-      selectedPokemon: null,
-      deleteSelectedPokemon: this.deleteSelectedPokemon,
-      selectPokemon: this.selectPokemon,
-      loading: false,
-      error: ""
+  const deleteError = useCallback((ms: number): void => {
+    setTimeout(() => setError(""), ms);
+  }, []);
+
+  const selectPokemon = useCallback(
+    async (name: string): Promise<boolean> => {
+      setLoading(true);
+      const pokemon = await getPokemonByName(name);
+      setLoading(false);
+      setSelectedPokemon(pokemon);
+
+      if (!pokemon) {
+        setError(`${name} not found`);
+        deleteError(2000);
+      }
+
+      return !!pokemon;
+    },
+    [deleteError]
+  );
+
+  const deleteSelectedPokemon = useCallback((): void => {
+    setSelectedPokemon(null);
+  }, []);
+
+  useEffect(() => {
+    const loadDetail = async (): Promise<void> => {
+      const value = localStorage.getItem("term") ?? "";
+      if (value) {
+        await selectPokemon(value);
+      }
     };
-  }
+    loadDetail();
+  }, [selectPokemon]);
 
-  selectPokemon = async (name: string) => {
-    this.setState((prevState) => ({ ...prevState, loading: true }));
-    const pokemon = await getPokemonByName(name);
-    this.setState({
-      selectedPokemon: pokemon,
-      loading: false,
-      error: pokemon ? "" : `${name} not found`
-    });
-    if (!pokemon) {
-      this.deleteError(2000);
-    }
-    return !!pokemon;
-  };
-
-  deleteError = (ms: number): void => {
-    setTimeout(() => this.setState({ error: "" }), ms);
-  };
-
-  deleteSelectedPokemon = () => {
-    this.setState({ selectedPokemon: null });
-  };
-
-  render() {
-    const { selectedPokemon, loading, error } = this.state;
-    const { selectPokemon, deleteSelectedPokemon } = this;
-
-    return (
-      <PokemonContext.Provider
-        value={{
-          selectPokemon,
-          deleteSelectedPokemon,
-          selectedPokemon,
-          loading,
-          error
-        }}
-      >
-        {this.props.children}
-      </PokemonContext.Provider>
-    );
-  }
+  return (
+    <PokemonContext.Provider
+      value={{
+        selectPokemon,
+        deleteSelectedPokemon,
+        selectedPokemon,
+        loading,
+        error
+      }}
+    >
+      {children}
+    </PokemonContext.Provider>
+  );
 }
 
 export default PokemonProvider;

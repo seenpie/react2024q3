@@ -1,4 +1,4 @@
-import { Component, ContextType } from "react";
+import { useContext, useEffect, useState } from "react";
 import { getPokemonList, IPokemonData } from "../../api/api.ts";
 import Loader from "../Loader/Loader.tsx";
 import Cards from "../Cards/Cards.tsx";
@@ -20,11 +20,10 @@ interface IMainState {
   loading: boolean;
 }
 
-class Main extends Component<object, IMainState> {
-  static contextType = PokemonContext;
-  declare context: ContextType<typeof PokemonContext>;
-
-  state: IMainState = {
+function Main() {
+  const { deleteSelectedPokemon, selectedPokemon, loading, selectPokemon } =
+    useContext(PokemonContext);
+  const [state, setState] = useState<IMainState>({
     offset: "0",
     limit: "40",
     cards: [],
@@ -35,16 +34,13 @@ class Main extends Component<object, IMainState> {
     },
     loading: true,
     selectedCard: null
-  };
+  });
 
-  componentDidMount() {
+  useEffect(() => {
     const fetchData = async () => {
-      const response = await getPokemonList(
-        this.state.offset,
-        this.state.limit
-      );
+      const response = await getPokemonList(state.offset, state.limit);
       if (response) {
-        this.setState((prevState) => ({
+        setState((prevState) => ({
           ...prevState,
           cards: response.results,
           totalCards: response.count,
@@ -55,41 +51,34 @@ class Main extends Component<object, IMainState> {
     };
 
     fetchData();
-  }
+  }, [state.offset, state.limit]);
 
-  selectCard = async (name: string) => {
-    const { selectPokemon } = this.context;
+  const selectCard = async (name: string) => {
     await selectPokemon(name);
   };
 
-  render() {
-    const { loading, selectedPokemon } = this.context;
-    const { cards, totalCards, loading: stateLoading } = this.state;
+  const { cards, totalCards, loading: stateLoading } = state;
 
-    if (loading || stateLoading) return <Loader />;
+  if (loading || stateLoading) return <Loader />;
 
-    if (selectedPokemon) {
-      return (
-        <main className={classes.main}>
-          <Detail
-            data={selectedPokemon}
-            onClick={this.context.deleteSelectedPokemon}
-          />
-        </main>
-      );
-    }
-
+  if (selectedPokemon) {
     return (
       <main className={classes.main}>
-        <Cards
-          cards={cards}
-          totalCards={totalCards ?? 0}
-          cardsOnPage={cards.length}
-          onClick={this.selectCard}
-        />
+        <Detail data={selectedPokemon} onClick={deleteSelectedPokemon} />
       </main>
     );
   }
+
+  return (
+    <main className={classes.main}>
+      <Cards
+        cards={cards}
+        totalCards={totalCards ?? 0}
+        cardsOnPage={cards.length}
+        onClick={selectCard}
+      />
+    </main>
+  );
 }
 
 export default Main;

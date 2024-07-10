@@ -1,31 +1,23 @@
-import { Component } from "react";
+import { useState } from "react";
 import classes from "./Buggy.module.scss";
 
-interface IBuggyComponentState {
-  throwError: boolean;
-}
+function Buggy() {
+  const [throwError, setThrowError] = useState<boolean>(false);
 
-class Buggy extends Component<object, IBuggyComponentState> {
-  state: IBuggyComponentState = {
-    throwError: false
+  const handleClick = (): void => {
+    setThrowError(true);
   };
 
-  handleClick = (): void => {
-    this.setState({ throwError: true });
-  };
-
-  render() {
-    if (this.state.throwError) {
-      throw new Error("I crashed!");
-    }
-    return (
-      <div>
-        <button className={classes.buggy} onClick={this.handleClick}>
-          #cause error
-        </button>
-      </div>
-    );
+  if (throwError) {
+    throw new Error("I crashed!");
   }
+  return (
+    <div>
+      <button className={classes.buggy} onClick={handleClick}>
+        #cause error
+      </button>
+    </div>
+  );
 }
 
 export default Buggy;
