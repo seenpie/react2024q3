@@ -1,6 +1,7 @@
 import { ReactNode, useCallback, useEffect, useState } from "react";
 import { PokemonContext } from "./PokemonContext.tsx";
 import { getPokemonByName, IPokemonData } from "../api/api.ts";
+import { useLocalStorage } from "../hooks/useLocalStorage.tsx";
 
 interface PokemonProviderProps {
   children: ReactNode;
@@ -12,6 +13,8 @@ function PokemonProvider({ children }: PokemonProviderProps) {
   const [selectedPokemon, setSelectedPokemon] = useState<IPokemonData | null>(
     null
   );
+
+  const { lsValue } = useLocalStorage();
 
   const deleteError = useCallback((ms: number): void => {
     setTimeout(() => setError(""), ms);
@@ -39,14 +42,10 @@ function PokemonProvider({ children }: PokemonProviderProps) {
   }, []);
 
   useEffect(() => {
-    const loadDetail = async (): Promise<void> => {
-      const value = localStorage.getItem("term") ?? "";
-      if (value) {
-        await selectPokemon(value);
-      }
-    };
-    loadDetail();
-  }, [selectPokemon]);
+    if (lsValue) {
+      selectPokemon(lsValue);
+    }
+  }, [selectPokemon, lsValue]);
 
   return (
     <PokemonContext.Provider
