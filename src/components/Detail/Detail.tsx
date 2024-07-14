@@ -1,27 +1,62 @@
-import { useEffect, useState } from "react";
-import { IPokemonData } from "../../api/api.ts";
+import { useCallback, useEffect, useState } from "react";
 import classes from "./Detail.module.scss";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
+import { getPokemonByName, IPokemonData } from "../../api/api";
+import Loader from "../Loader/Loader";
 
-interface IDetailProps {
-  data: IPokemonData;
-  onClick: () => void;
-}
-
-function Detail({ data, onClick }: IDetailProps) {
+function Detail() {
   const [description, setDescription] = useState<string>("");
+  const [data, setData] = useState<IPokemonData>();
+  const { pokemonId } = useParams();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  const handleClose = useCallback(() => {
+    const path = searchParams ? `/?${searchParams}` : "/";
+    navigate(path);
+  }, [navigate, searchParams]);
 
   useEffect(() => {
-    const description =
-      data.description.flavor_text_entries.find(
-        (item) => item.language.name === "en"
-      )?.flavor_text ?? "not found description";
-    setDescription(description);
-  }, [data.description.flavor_text_entries]);
+    const fetchData = async (pokemonName: string) => {
+      setLoading(true);
+      const data = await getPokemonByName(pokemonName);
+
+      if (data) {
+        setData(data);
+        const description =
+          data.description.flavor_text_entries.find(
+            (item) => item.language.name === "en"
+          )?.flavor_text ?? "not found description";
+        setDescription(description);
+      }
+      setLoading(false);
+    };
+    if (pokemonId) {
+      fetchData(pokemonId);
+    }
+  }, [pokemonId]);
+
+  if (loading) {
+    return (
+      <aside className={classes.wrapper}>
+        <Loader />;
+      </aside>
+    );
+  }
+
+  if (!data) {
+    return (
+      <aside className={classes.wrapper}>
+        <div>not found</div>;
+      </aside>
+    );
+  }
 
   return (
-    <div className={classes.wrapper}>
-      <button className={classes.button_back} onClick={onClick}>
-        #back
+    <aside className={classes.wrapper}>
+      <button className={classes.button} onClick={handleClose}>
+        #close
       </button>
       <div className={classes.pokemon__wrapper}>
         <div className={classes.pokemon}>
@@ -40,7 +75,7 @@ function Detail({ data, onClick }: IDetailProps) {
           </div>
         </div>
       </div>
-    </div>
+    </aside>
   );
 }
 

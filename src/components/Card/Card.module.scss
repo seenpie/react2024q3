@@ -7,6 +7,9 @@
   text-transform: uppercase;
   font-weight: bold;
   border-radius: 15px 5px 15px 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &:hover {
     animation: float 1s infinite;

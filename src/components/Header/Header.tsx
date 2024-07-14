@@ -1,27 +1,26 @@
-import { FormEvent, useCallback, useContext, useEffect, useState } from "react";
+import { FormEvent, useCallback, useEffect, useState } from "react";
 import Buggy from "../Buggy/Buggy.tsx";
 import Input from "../Input/Input.tsx";
-import { PokemonContext } from "../../context/PokemonContext.tsx";
 import classes from "./Header.module.scss";
 import { useLocalStorage } from "../../hooks/useLocalStorage.tsx";
+import { useSearchParams } from "react-router-dom";
 
 function Header() {
-  const { selectPokemon } = useContext(PokemonContext);
   const [inputValue, setInputValue] = useState<string>("");
   const { lsValue, updateLsValue } = useLocalStorage();
+  const [, setSearchParams] = useSearchParams();
 
-  const handleSearch = useCallback(
-    async (searchTerm?: string): Promise<void> => {
-      const value =
-        searchTerm?.trim().toLowerCase() || inputValue.trim().toLowerCase();
-      if (!value) return;
-      const isFound = await selectPokemon(value);
-      if (isFound) {
-        updateLsValue(value);
-      }
-    },
-    [inputValue, selectPokemon, updateLsValue]
-  );
+  const handleSearch = useCallback(async (): Promise<void> => {
+    const value = inputValue.trim().toLowerCase();
+    let searchParamsValue = value;
+
+    if (!value) {
+      searchParamsValue = "";
+    }
+
+    setSearchParams({ search: searchParamsValue });
+    updateLsValue(value);
+  }, [inputValue, updateLsValue, setSearchParams]);
 
   const handleInput = useCallback((event: FormEvent): void => {
     const target = event.target as HTMLInputElement;
@@ -29,14 +28,16 @@ function Header() {
   }, []);
 
   useEffect(() => {
-    setInputValue(lsValue);
+    if (lsValue) {
+      setInputValue(lsValue);
+    }
   }, [lsValue]);
 
   return (
     <header className={classes.header}>
       <div>
         <Input
-          onClick={() => handleSearch()}
+          onClick={handleSearch}
           value={inputValue}
           onInput={handleInput}
         />

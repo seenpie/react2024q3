@@ -1,16 +1,22 @@
+import { Link } from "react-router-dom";
 import classes from "./Card.module.scss";
+import { useSearchParams } from "react-router-dom";
 
 interface ICardProps {
   name: string;
-  onClick?: () => void;
   className?: string;
 }
 
-function Card({ name, onClick, className }: ICardProps) {
+function Card({ name, className }: ICardProps) {
+  const [searchParams] = useSearchParams();
+
+  const redirect = searchParams
+    ? `/pokemon/${name}?${searchParams}`
+    : `/pokemon/${name}`;
   return (
-    <div className={`${classes.card} ${className}`} onClick={onClick}>
+    <Link to={redirect} className={`${classes.card} ${className}`}>
       {name}
-    </div>
+    </Link>
   );
 }
 

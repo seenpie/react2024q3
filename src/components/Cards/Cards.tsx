@@ -6,10 +6,9 @@ interface ICardsProps {
   readonly cards: PokeAPI.NamedAPIResource[];
   readonly totalCards: number;
   readonly cardsOnPage: number;
-  readonly onClick: (name: string) => void;
 }
 
-function Cards({ cards, totalCards, onClick }: ICardsProps) {
+function Cards({ cards, totalCards }: ICardsProps) {
   return (
     <div className={classes.wrapper}>
       <section className={classes.text}>
@@ -17,7 +16,7 @@ function Cards({ cards, totalCards, onClick }: ICardsProps) {
       </section>
       <section className={classes.cards}>
         {cards.map((card, i) => (
-          <Card key={i} name={card.name} onClick={() => onClick(card.name)} />
+          <Card key={i} name={card.name} />
         ))}
       </section>
     </div>

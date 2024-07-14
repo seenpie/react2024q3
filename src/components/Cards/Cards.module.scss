@@ -6,7 +6,6 @@
 
 .text {
   width: fit-content;
-  //font-style: italic;
   padding: 10px;
   border-radius: 15px;
   font-family: monospace;
@@ -20,7 +19,7 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   justify-items: center;
-  align-items: center;
+  align-items: stretch;
   gap: 1rem;
   font-size: 1.2rem;
   transition: all 0.5s;

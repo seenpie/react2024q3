@@ -3,28 +3,32 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  //height: 100%;
-  gap: 1rem;
+  position: relative;
+  padding-top: 18px;
+  flex: 1;
 }
 
-.button_back {
+.button {
   @include button;
   width: fit-content;
+  border-radius: 15px 15px 0 0;
+  align-self: flex-end;
 
   &:hover {
-    transform: translateX(-5px);
-    filter: invert(1);
+    background-color: var(--red-color);
   }
 }
 
 .pokemon {
   display: flex;
   justify-content: center;
+  flex-direction: column;
   gap: 0.6rem;
   overflow: hidden;
   background: #000;
   width: fit-content;
   border-radius: 15px;
+  border-top-right-radius: 0;
   max-width: 1000px;
 
   &__wrapper {
@@ -35,8 +39,9 @@
 
 .image {
   padding: 10px;
-  //border-radius: 15px 0 0 15px;
   background: #fff;
+  display: flex;
+  justify-content: center;
 }
 
 .information {

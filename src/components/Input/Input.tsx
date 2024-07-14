@@ -5,10 +5,18 @@ import { GoSearch } from "react-icons/go";
 interface IInputProps {
   onClick?: () => void;
   onInput?: (event: FormEvent) => void;
+  placeholder?: string;
   value: string;
+  className?: string;
 }
 
-function Input({ onClick, onInput, value }: IInputProps) {
+function Input({
+  onClick,
+  onInput,
+  value,
+  placeholder,
+  className
+}: IInputProps) {
   const handleKeyDown = (event: KeyboardEvent): void => {
     if (event.key === "Enter") {
       event.preventDefault();
@@ -17,11 +25,11 @@ function Input({ onClick, onInput, value }: IInputProps) {
   };
 
   return (
-    <div className={classes.search}>
+    <div className={`${classes.search} ${className}`}>
       <input
         className={classes.input}
         type="text"
-        placeholder="#pokemon name"
+        placeholder={placeholder ?? "#pokemon name"}
         value={value}
         onInput={onInput}
         onKeyDown={handleKeyDown}

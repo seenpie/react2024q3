@@ -1,19 +1,21 @@
 import "./App.css";
 import ErrorBoundary from "./components/ErrorBaundary.tsx";
-import Header from "./components/Header/Header.tsx";
-import Main from "./components/Main/Main.tsx";
-import PokemonProvider from "./context/PokemonProvider.tsx";
-import Layout from "./components/Layout/Layout.tsx";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import NotFoundPage from "./pages/NotFoundPage/NotFoundPage.tsx";
+import RootPage from "./pages/RootPage/RootPage.tsx";
+import Detail from "./components/Detail/Detail.tsx";
 
 function App() {
   return (
     <ErrorBoundary>
-      <PokemonProvider>
-        <Layout>
-          <Header />
-          <Main />
-        </Layout>
-      </PokemonProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<RootPage />}>
+            <Route path="/pokemon/:pokemonId" element={<Detail />} />
+          </Route>
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </BrowserRouter>
     </ErrorBoundary>
   );
 }

@@ -9,8 +9,8 @@ export interface IPokemonData {
 const imageURL = "https://img.pokemondb.net/artwork/";
 
 export async function getPokemonList(
-  offset = "0",
-  limit = "10"
+  offset = 0,
+  limit = 5000
 ): Promise<PokeAPI.NamedAPIResourceList | null> {
   try {
     const response = await fetch(
