@@ -1,0 +1,32 @@
+.card {
+  width: 100%;
+  cursor: pointer;
+  padding: 16px;
+  text-align: center;
+  background: #fff;
+  text-transform: uppercase;
+  font-weight: bold;
+  border-radius: 15px 5px 15px 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    animation: float 1s infinite;
+    box-shadow: 0 0 10px #fff;
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}

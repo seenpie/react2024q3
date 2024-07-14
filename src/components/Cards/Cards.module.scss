@@ -1,0 +1,31 @@
+@import "../../assets/styles/mixins.scss";
+
+.wrapper {
+  @include wrapper;
+}
+
+.text {
+  width: fit-content;
+  padding: 10px;
+  border-radius: 15px;
+  font-family: monospace;
+
+  > h2 {
+    font-weight: 400;
+  }
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  justify-items: center;
+  align-items: stretch;
+  gap: 1rem;
+  font-size: 1.2rem;
+  transition: all 0.5s;
+  flex: 1;
+}
+
+.grid_span {
+  grid-column: span 2;
+}

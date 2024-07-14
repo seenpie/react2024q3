@@ -1,0 +1,33 @@
+.wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  background: #fff;
+  width: fit-content;
+  border-radius: 15px 5px 15px 5px;
+  overflow: hidden;
+  font-size: 1.4rem;
+
+  &__button {
+    width: 40px;
+    max-width: 100%;
+    font-size: inherit;
+    cursor: pointer;
+    background: none;
+    border: none;
+    transition: all 0.3s;
+
+    &:not(:disabled):hover {
+      background: var(--primary-color);
+    }
+  }
+
+  &__input {
+    border-radius: 0;
+    max-width: 100px;
+  }
+}
