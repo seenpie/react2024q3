@@ -34,7 +34,12 @@ function Input({
         onInput={onInput}
         onKeyDown={handleKeyDown}
       />
-      <button className={classes.button} type="button" onClick={onClick}>
+      <button
+        className={classes.button}
+        type="button"
+        onClick={onClick}
+        data-testid="searchBtn"
+      >
         <GoSearch />
       </button>
     </div>
