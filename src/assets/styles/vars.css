@@ -3,4 +3,22 @@
   --primary-color: #089af4;
   --secondary-color: #2fc190;
   --red-color: #e06e6e;
+  --default-border-radius: 15px;
+  --dark-color: #000c1a;
+  --text-color: #000;
+  --background-color: #fff;
+  --card-background: #fff;
+  --box-shadow: 0 0 10px #fff;
+  --hover-color: #089af4;
+  --transition-duration: 0.3s;
+}
+
+[data-theme="dark"] {
+  --primary-color: #003049;
+  --secondary-color: #0d484b;
+  --red-color: #b22a2a;
+  --text-color: #efece7;
+  --background-color: var(--dark-color);
+  --card-background: var(--dark-color);
+  --box-shadow: none;
 }

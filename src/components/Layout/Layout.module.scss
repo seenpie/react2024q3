@@ -1,3 +1,5 @@
+@import "../../assets/styles/vars.css";
+
 .layout {
   width: 100%;
   max-width: 100%;
@@ -8,4 +10,10 @@
   overflow: auto;
   scrollbar-width: thin;
   scrollbar-color: #fff transparent;
+  transition: all 0.5s;
+  background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+
+  &[data-theme="dark"] {
+    background: linear-gradient(90deg, var(--primary-color), var(--primary-color));
+  }
 }

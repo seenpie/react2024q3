@@ -1,6 +1,5 @@
 #root {
   height: 100vh;
-  background: linear-gradient(var(--primary-color), var(--secondary-color));
   display: flex;
   justify-content: center;
 }

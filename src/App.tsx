@@ -4,17 +4,20 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage.tsx";
 import RootPage from "./pages/RootPage/RootPage.tsx";
 import Detail from "./components/Detail/Detail.tsx";
+import ThemeProvider from "./context/ThemeContext/ThemeProvider.tsx";
 
 function App() {
   return (
     <ErrorBoundary>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<RootPage />}>
-            <Route path="/pokemon/:pokemonId" element={<Detail />} />
-          </Route>
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
+        <ThemeProvider>
+          <Routes>
+            <Route path="/" element={<RootPage />}>
+              <Route path="/pokemon/:pokemonId" element={<Detail />} />
+            </Route>
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </ThemeProvider>
       </BrowserRouter>
     </ErrorBoundary>
   );
