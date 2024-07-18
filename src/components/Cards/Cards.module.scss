@@ -9,6 +9,8 @@
   padding: 10px;
   border-radius: 15px;
   font-family: monospace;
+  transition: all var(--transition-duration);
+  color: var(--text-color);
 
   > h2 {
     font-weight: 400;

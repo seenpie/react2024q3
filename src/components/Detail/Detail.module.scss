@@ -13,6 +13,8 @@
   width: fit-content;
   border-radius: 15px 15px 0 0;
   align-self: flex-end;
+  background: var(--background-color);
+  color: var(--text-color);
 
   &:hover {
     background-color: var(--red-color);
@@ -23,12 +25,9 @@
   display: flex;
   justify-content: center;
   flex-direction: column;
-  gap: 0.6rem;
   overflow: hidden;
-  background: #000;
   width: fit-content;
-  border-radius: 15px;
-  border-top-right-radius: 0;
+  border-radius: 15px 0 15px 15px;
   max-width: 1000px;
 
   &__wrapper {
@@ -39,19 +38,21 @@
 
 .image {
   padding: 10px;
-  background: #fff;
+  background: var(--background-color);
   display: flex;
   justify-content: center;
+  transition: all var(--transition-duration);
 }
 
 .information {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  background-color: #fff;
+  background-color: var(--background-color);
+  color: var(--text-color);
   padding: 1rem;
   font-size: 1.4rem;
-  border-radius: 0 15px 15px 0;
+  transition: all var(--transition-duration);
 
   &__name {
     > h2 {

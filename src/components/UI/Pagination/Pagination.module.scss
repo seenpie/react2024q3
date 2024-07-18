@@ -6,11 +6,12 @@
 .pagination {
   display: flex;
   justify-content: center;
-  background: #fff;
+  background: var(--background-color);
   width: fit-content;
   border-radius: 15px 5px 15px 5px;
   overflow: hidden;
   font-size: 1.4rem;
+  transition: all var(--transition-duration);
 
   &__button {
     width: 40px;
@@ -20,9 +21,10 @@
     background: none;
     border: none;
     transition: all 0.3s;
+    color: var(--text-color);
 
     &:not(:disabled):hover {
-      background: var(--primary-color);
+      background: var(--hover-color);
     }
   }
 

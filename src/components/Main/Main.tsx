@@ -4,7 +4,7 @@ import Loader from "../Loader/Loader.tsx";
 import Cards from "../Cards/Cards.tsx";
 import { PokeAPI } from "pokeapi-types";
 import classes from "./Main.module.scss";
-import Pagination from "../Pagination/Pagination.tsx";
+import Pagination from "../UI/Pagination/Pagination.tsx";
 import { useSearchParams } from "react-router-dom";
 import { useLocalStorage } from "../../hooks/useLocalStorage.tsx";
 
@@ -42,7 +42,6 @@ function Main({ children }: IMainProps) {
 
       let offset = 0;
       if (pageParams) {
-        console.log(pageParams);
         offset = state.limit * Number(pageParams) - state.limit;
       }
 
@@ -73,13 +72,11 @@ function Main({ children }: IMainProps) {
             offset,
             loading: false
           }));
-          console.log(coincidences);
         }
         return;
       }
 
       const response = await getPokemonList(offset, state.limit);
-      console.log(response);
 
       if (response) {
         setState((prevState) => ({
@@ -97,7 +94,6 @@ function Main({ children }: IMainProps) {
 
   const handlePaginationClick = useCallback(
     (pageNumber: number) => {
-      console.log(searchParams);
       const search = searchParams.get("search");
       const newOffset = state.limit * pageNumber - state.limit;
       setSearchParams({ page: String(pageNumber), search: search ?? "" });

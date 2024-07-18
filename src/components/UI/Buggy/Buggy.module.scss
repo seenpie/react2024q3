@@ -1,11 +1,12 @@
-@import "../../assets/styles/mixins";
+@import "../../../assets/styles/mixins";
 
 .buggy {
   @include button;
   transform: skewY(0);
+  color: var(--text-color);
+  background: var(--background-color);
 
   &:hover {
-    //background: var(--red-color);
     transform: skewY(10deg);
     filter: invert(1);
   }

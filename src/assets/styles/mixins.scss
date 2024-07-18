@@ -8,7 +8,7 @@
   padding: 5px;
   border-radius: 2rem;
   border: none;
-  transition: all 0.3s;
+  transition: all var(--transition-duration);
   cursor: pointer;
   background: #fff;
 }

@@ -6,7 +6,7 @@ import {
   checkInputValue,
   collectPaginationItems,
   countTotalPages
-} from "../../utils/pagination.utils.ts";
+} from "../../../utils/pagination.utils.ts";
 
 interface IPaginationProps {
   totalCards: number;

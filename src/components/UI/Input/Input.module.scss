@@ -3,13 +3,13 @@
   font-size: 1.4rem;
   display: flex;
   border-radius: 2rem;
-  background: #fff;
+  background: var(--background-color);
   transition: all 0.3s;
   z-index: 1;
   position: relative;
 
   &:focus-within {
-    box-shadow: 0 0 10px #fff;
+    box-shadow: var(--box-shadow);
   }
 }
 
@@ -19,6 +19,7 @@
   border: none;
   border-radius: 2rem;
   width: 100%;
+  color: var(--text-color);
 
   &:hover {
     outline: none;
@@ -37,8 +38,9 @@
   border: none;
   background-color: transparent;
   transition: all 0.3s;
+  color: var(--text-color);
 
   &:hover {
-    color: #089af4;
+    color: var(--hover-color);
   }
 }

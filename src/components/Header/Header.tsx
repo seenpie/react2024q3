@@ -1,9 +1,10 @@
 import { FormEvent, useCallback, useEffect, useState } from "react";
-import Buggy from "../Buggy/Buggy.tsx";
-import Input from "../Input/Input.tsx";
+import Buggy from "../UI/Buggy/Buggy.tsx";
+import Input from "../UI/Input/Input.tsx";
 import classes from "./Header.module.scss";
 import { useLocalStorage } from "../../hooks/useLocalStorage.tsx";
 import { useSearchParams } from "react-router-dom";
+import ThemeSwitcher from "../UI/ThemeSwitcher/ThemeSwitcher.tsx";
 
 function Header() {
   const [inputValue, setInputValue] = useState<string>("");
@@ -42,7 +43,8 @@ function Header() {
           onInput={handleInput}
         />
       </div>
-      <div>
+      <div className={classes.buttons}>
+        <ThemeSwitcher />
         <Buggy />
       </div>
     </header>
