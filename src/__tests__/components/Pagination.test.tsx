@@ -36,7 +36,6 @@ describe("Pagination", () => {
     await waitFor(() => {
       const button = screen.getByRole("button", { name: "2" });
       fireEvent.click(button);
-      screen.debug();
     });
 
     await waitFor(() => {
