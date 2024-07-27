@@ -1,0 +1,45 @@
+@import "../../assets/styles/mixins";
+
+.footer {
+  padding: 15px;
+  background: var(--background-color);
+  font-size: 1.2rem;
+  bottom: 0;
+  right: 0;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+
+  &__button {
+    @include button;
+    background: none;
+    font-size: inherit;
+    color: var(--text-color);
+    border: 2px solid var(--hover-color);
+    border-radius: 15px;
+
+    &:hover {
+      background-color: rgba(8, 154, 244, 0.27);
+    }
+
+    &_disabled {
+      pointer-events: none;
+    }
+  }
+}
+
+.button_wrapper {
+  display: flex;
+  gap: 0.4rem;
+}
+
+@keyframes appear {
+  0% {
+    transform: translateY(60px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
