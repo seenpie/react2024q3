@@ -2,18 +2,18 @@ import { useState } from "react";
 import classes from "./Buggy.module.scss";
 
 function Buggy() {
-  const [throwError, setThrowError] = useState<boolean>(false);
+  const [isErrorThrow, setThrowError] = useState<boolean>(false);
 
-  const handleClick = (): void => {
+  const throwError = (): void => {
     setThrowError(true);
   };
 
-  if (throwError) {
+  if (isErrorThrow) {
     throw new Error("I crashed!");
   }
   return (
     <div>
-      <button className={classes.buggy} onClick={handleClick}>
+      <button className={classes.buggy} onClick={throwError}>
         #cause error
       </button>
     </div>

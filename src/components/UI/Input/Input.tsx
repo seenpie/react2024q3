@@ -4,7 +4,7 @@ import { GoSearch } from "react-icons/go";
 
 interface IInputProps {
   onClick?: () => void;
-  onInput?: (event: FormEvent) => void;
+  onChange?: (event: FormEvent) => void;
   placeholder?: string;
   value: string;
   className?: string;
@@ -12,7 +12,7 @@ interface IInputProps {
 
 function Input({
   onClick,
-  onInput,
+  onChange,
   value,
   placeholder,
   className
@@ -31,7 +31,7 @@ function Input({
         type="text"
         placeholder={placeholder ?? "#pokemon name"}
         value={value}
-        onInput={onInput}
+        onChange={onChange}
         onKeyDown={handleKeyDown}
       />
       <button
