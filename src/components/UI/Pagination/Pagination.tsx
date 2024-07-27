@@ -1,38 +1,16 @@
-import { FormEvent, useCallback, useEffect, useState } from "react";
+import { FormEvent, useCallback, useState } from "react";
 import Input from "../Input/Input.tsx";
 import classes from "./Pagination.module.scss";
-import {
-  calculateCurrentPage,
-  checkInputValue,
-  collectPaginationItems,
-  countTotalPages
-} from "../../../utils/pagination.utils.ts";
+import { checkInputValue } from "../../../utils/pagination.utils.ts";
+import { usePagination } from "./Pagination.hooks.ts";
 
 interface IPaginationProps {
-  totalCards: number;
-  offset: number;
-  limit: number;
   onClick: (pageNumber: number) => void;
 }
 
-function Pagination({ totalCards, offset, limit, onClick }: IPaginationProps) {
-  const [totalPage] = useState(() => countTotalPages(totalCards, limit));
-  const [currentPage, setCurrentPage] = useState(1);
-  const [paginationItems, setPaginationItems] = useState<(number | string)[]>();
+function Pagination({ onClick }: IPaginationProps) {
   const [inputValue, setInputValue] = useState("");
-
-  useEffect(() => {
-    const page: number = calculateCurrentPage(
-      totalCards,
-      totalPage,
-      limit,
-      offset
-    );
-    setCurrentPage(page);
-
-    const paginationItems = collectPaginationItems(page, totalPage);
-    setPaginationItems(paginationItems);
-  }, [totalCards, offset, limit, totalPage]);
+  const { totalPage, currentPage, paginationItems } = usePagination();
 
   const handleClick = useCallback((): void => {
     const checkedInputValue: number | null = checkInputValue(
@@ -59,7 +37,7 @@ function Pagination({ totalCards, offset, limit, onClick }: IPaginationProps) {
                 key={id}
                 className={classes.pagination__input}
                 value={inputValue}
-                onInput={handleInput}
+                onChange={handleInput}
                 onClick={handleClick}
                 placeholder={`${currentPage}`}
               />
