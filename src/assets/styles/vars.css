@@ -11,9 +11,12 @@
   --box-shadow: 0 0 10px #fff;
   --hover-color: #089af4;
   --transition-duration: 0.3s;
+  --checkbox-color: #b09e06;
+  --hover-dimmer-color: rgba(8, 154, 244, 0.27);
 }
 
 [data-theme="dark"] {
+  --checkbox-color: #ffe200;
   --primary-color: #003049;
   --secondary-color: #0d484b;
   --red-color: #b22a2a;
