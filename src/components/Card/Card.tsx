@@ -1,6 +1,13 @@
-import { Link } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import classes from "./Card.module.scss";
-import { useSearchParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addPokemonToList,
+  AppDispatch,
+  removePokemonFromList,
+  RootState
+} from "../../state";
+import { FormEvent, useEffect, useState } from "react";
 
 interface ICardProps {
   name: string;
@@ -9,14 +16,43 @@ interface ICardProps {
 
 function Card({ name, className }: ICardProps) {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const tokens = useSelector(
+    (state: RootState) => state.favoritePokemonList.pokemonList
+  );
+  const [isChecked, setIsChecked] = useState<boolean>(tokens.includes(name));
 
-  const redirect = searchParams
+  useEffect(() => {
+    setIsChecked(tokens.includes(name));
+  }, [tokens, name]);
+
+  const path = searchParams
     ? `/pokemon/${name}?${searchParams}`
     : `/pokemon/${name}`;
+
+  const handleCheckboxClick = (event: FormEvent) => {
+    event.stopPropagation();
+    if (isChecked) {
+      dispatch(removePokemonFromList(name));
+    } else {
+      dispatch(addPokemonToList(name));
+    }
+  };
+
+  const redirect = () => {
+    navigate(path);
+  };
+
   return (
-    <Link to={redirect} className={`${classes.card} ${className}`}>
-      {name}
-    </Link>
+    <div className={`${classes.card} ${className}`} onClick={redirect}>
+      <span>{name}</span>
+      <span
+        className={classes.card__checkbox}
+        onClick={handleCheckboxClick}
+        data-checked={isChecked}
+      />
+    </div>
   );
 }
 

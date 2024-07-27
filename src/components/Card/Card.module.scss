@@ -1,7 +1,8 @@
 .card {
+  position: relative;
   width: 100%;
   cursor: pointer;
-  padding: 16px;
+  padding: 8px;
   text-align: center;
   background: var(--background-color);
   color: var(--text-color);
@@ -9,13 +10,43 @@
   font-weight: bold;
   border-radius: 15px 5px 15px 5px;
   display: flex;
-  justify-content: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
   align-items: center;
   transition: all var(--transition-duration);
 
   &:hover {
     animation: float 1s infinite;
     box-shadow: var(--box-shadow);
+  }
+
+  &__checkbox {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid var(--hover-color);
+    transition: all var(--transition-duration);
+
+    &:after {
+      content: "+";
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.5rem;
+      color: var(--hover-color);
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      transition: all var(--transition-duration);
+    }
+
+    &[data-checked="true"] {
+      background-color: var(--hover-dimmer-color);
+
+      &:after {
+        opacity: 1;
+      }
+    }
   }
 }
 
