@@ -31,8 +31,9 @@ function Header() {
   useEffect(() => {
     if (lsValue) {
       setInputValue(lsValue);
+      setSearchParams({ search: lsValue });
     }
-  }, [lsValue]);
+  }, [lsValue, setSearchParams]);
 
   return (
     <header className={classes.header}>
@@ -40,7 +41,7 @@ function Header() {
         <Input
           onClick={handleSearch}
           value={inputValue}
-          onInput={handleInput}
+          onChange={handleInput}
         />
       </div>
       <div className={classes.buttons}>
