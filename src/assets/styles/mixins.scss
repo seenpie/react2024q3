@@ -1,0 +1,14 @@
+@mixin wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin button {
+  padding: 5px;
+  border-radius: 2rem;
+  border: none;
+  transition: all var(--transition-duration);
+  cursor: pointer;
+  background: #fff;
+}

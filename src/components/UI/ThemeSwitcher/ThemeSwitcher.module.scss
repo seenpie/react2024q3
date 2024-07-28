@@ -1,0 +1,36 @@
+.switcher {
+  width: 60px;
+  height: 30px;
+  border: none;
+  border-radius: var(--default-border-radius);
+  padding: 4px;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+  background-color: #fff;
+
+  &[data-theme="dark"] {
+    background-color: var(--dark-color);
+  }
+
+  > div {
+    width: 100%;
+    height: 100%;
+    position: relative;
+
+    > span {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 20px;
+      border-radius: 50%;
+      background-color: var(--dark-color);
+      transition: all 0.3s ease-in-out;
+
+      &[data-pos="dark"] {
+        transform: translateX(calc(100% + 20px - 8px));
+        background: #fff;
+      }
+    }
+  }
+}
