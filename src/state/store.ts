@@ -1,17 +1,28 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { favoritePokemonListSlice } from "./favoritePokemonList/favoritePokemonListSlice.ts";
 import { pageDataSlice } from "./pageData/pageDataSlice.ts";
 import { pokemonApi } from "./pokemonApi.ts";
+import { setupListeners } from "@reduxjs/toolkit/query";
 
-export const state = configureStore({
-  reducer: {
-    favoritePokemonList: favoritePokemonListSlice.reducer,
-    pageData: pageDataSlice.reducer,
-    [pokemonApi.reducerPath]: pokemonApi.reducer
-  },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(pokemonApi.middleware)
+const rootReducer = combineReducers({
+  favoritePokemonList: favoritePokemonListSlice.reducer,
+  pageData: pageDataSlice.reducer,
+  [pokemonApi.reducerPath]: pokemonApi.reducer
 });
 
-export type RootState = ReturnType<typeof state.getState>;
+export const setupStore = (preloadedState?: Partial<RootState>) => {
+  const store = configureStore({
+    reducer: rootReducer,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(pokemonApi.middleware),
+    preloadedState
+  });
+  setupListeners(store.dispatch);
+  return store;
+};
+
+export const state = setupStore();
+
+export type AppState = typeof state;
+export type RootState = ReturnType<typeof rootReducer>;
 export type AppDispatch = typeof state.dispatch;
