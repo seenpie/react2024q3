@@ -8,7 +8,7 @@ function Detail() {
   if (isLoading) {
     return (
       <aside className={classes.wrapper}>
-        <Loader />;
+        <Loader />
       </aside>
     );
   }
@@ -16,7 +16,7 @@ function Detail() {
   if (!pokemonData) {
     return (
       <aside className={classes.wrapper}>
-        <div>not found</div>;
+        <div>not found</div>
       </aside>
     );
   }

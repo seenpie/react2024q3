@@ -84,14 +84,17 @@ export function useMain() {
     } else {
       updateState(offset, data.results, data.count);
     }
-  }, [searchParams, data, state.limit, dispatch, page, search]);
+  }, [data, state.limit, page, dispatch, search]);
 
   const handlePaginationClick = useCallback(
     (pageNumber: number) => {
-      const search = searchParams.get("search");
-      const newOffset = state.limit * pageNumber - state.limit;
-      setSearchParams({ page: String(pageNumber), search: search ?? "" });
-      setState((prevState) => ({ ...prevState, offset: newOffset }));
+      const newSearchParams = new URLSearchParams(searchParams.toString());
+      newSearchParams.set("page", String(pageNumber));
+      setSearchParams(newSearchParams);
+      setState((prevState) => ({
+        ...prevState,
+        offset: state.limit * pageNumber - state.limit
+      }));
     },
     [state.limit, setSearchParams, searchParams]
   );

@@ -9,7 +9,7 @@ import ThemeSwitcher from "../UI/ThemeSwitcher/ThemeSwitcher.tsx";
 function Header() {
   const [inputValue, setInputValue] = useState<string>("");
   const { lsValue, updateLsValue } = useLocalStorage();
-  const [, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const handleSearch = useCallback(async (): Promise<void> => {
     const value = inputValue.trim().toLowerCase();
@@ -30,10 +30,12 @@ function Header() {
 
   useEffect(() => {
     if (lsValue) {
+      const newSearchParams = new URLSearchParams(searchParams.toString());
+      newSearchParams.set("search", lsValue);
       setInputValue(lsValue);
-      setSearchParams({ search: lsValue });
+      setSearchParams(newSearchParams);
     }
-  }, [lsValue, setSearchParams]);
+  }, [lsValue, setSearchParams, searchParams]);
 
   return (
     <header className={classes.header}>
