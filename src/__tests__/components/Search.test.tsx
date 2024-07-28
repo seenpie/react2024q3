@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
 import Header from "../../components/Header/Header.tsx"; // Убедитесь, что путь к компоненту правильный
 import { MemoryRouter } from "react-router-dom";
+import { renderWithProviders } from "../utils/test.utils.tsx";
 
 describe("Search", () => {
   beforeEach(() => {
@@ -10,11 +11,7 @@ describe("Search", () => {
   const localStorageKey = "term";
 
   it("Should save the entered value to the local storage", async () => {
-    render(
-      <MemoryRouter>
-        <Header />
-      </MemoryRouter>
-    );
+    renderWithProviders(<Header />);
 
     const inputElement = screen.getByPlaceholderText("#pokemon name");
     const searchButton = screen.getByTestId("searchBtn");

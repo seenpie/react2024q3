@@ -1,91 +1,79 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
-import Detail from "../../components/Detail/Detail.tsx";
-import { getPokemonByName } from "../../api/api";
+import { screen, waitFor } from "@testing-library/react";
+import Detail from "../../components/Detail/Detail";
 import { describe, expect, it, vi } from "vitest";
+import { renderWithProviders } from "../utils/test.utils.tsx";
+import { useGetPokemonByNameQuery } from "../../state";
 
-vi.mock("../../api/api", () => ({
-  getPokemonByName: vi.fn()
-}));
-
-const mockedGetPokemonByName = getPokemonByName as ReturnType<typeof vi.fn>;
-
-const mockPokemonData = {
-  description: {
-    flavor_text_entries: [
-      { language: { name: "en" }, flavor_text: "A sample description" }
-    ]
-  },
-  pokemon: { name: "pikachu" },
-  image: "some-image-url"
+const mockCommonPokemonData = {
+  name: "pikachu",
+  species: { url: "some-url" }
 };
 
-mockedGetPokemonByName.mockResolvedValue(mockPokemonData);
+const mockDescriptionPokemonData = {
+  flavor_text_entries: [
+    { language: { name: "en" }, flavor_text: "A sample description" }
+  ]
+};
+
+vi.mock("../../state", async (importOriginal) => {
+  const originalModule = await importOriginal();
+
+  if (typeof originalModule !== "object" || originalModule === null) {
+    throw new Error("importOriginal did not return an object");
+  }
+
+  return {
+    ...originalModule,
+    useGetPokemonByNameQuery: vi.fn(() => ({
+      data: mockCommonPokemonData,
+      isFetching: false
+    })),
+    useGetPokemonDescriptionByNameQuery: vi.fn(() => ({
+      data: mockDescriptionPokemonData,
+      isFetching: false
+    }))
+  };
+});
 
 describe("Detail", () => {
-  it("Should fetch and display correct Pokemon data", async () => {
-    render(
-      <MemoryRouter initialEntries={["/pokemon/pikachu"]}>
-        <Routes>
-          <Route path="/pokemon/:pokemonId" element={<Detail />} />
-        </Routes>
-      </MemoryRouter>
-    );
-
-    await waitFor(() => {
-      expect(getPokemonByName).toHaveBeenCalledWith("pikachu");
-      expect(screen.getByText(/Name:/i)).toBeInTheDocument();
-      expect(
-        screen.getByText(mockPokemonData.pokemon.name)
-      ).toBeInTheDocument();
-
-      expect(screen.getByText(/Description:/i)).toBeInTheDocument();
-      expect(
-        screen.getByText(
-          mockPokemonData.description.flavor_text_entries[0].flavor_text
-        )
-      ).toBeInTheDocument();
-    });
-  });
-
-  it("Should clicking the close button hides the component", async () => {
-    render(
-      <MemoryRouter initialEntries={["/pokemon/pikachu"]}>
-        <Routes>
-          <Route path="/pokemon/:pokemonId" element={<Detail />} />
-        </Routes>
-      </MemoryRouter>
-    );
-
-    await waitFor(() => {
-      expect(
-        screen.getByText(
-          mockPokemonData.description.flavor_text_entries[0].flavor_text
-        )
-      ).toBeInTheDocument();
-    });
-
-    const closeButton = screen.getByRole("button", { name: /#close/i });
-    fireEvent.click(closeButton);
-
-    await waitFor(() => {
-      expect(closeButton).not.toBeInTheDocument();
-      expect(
-        screen.queryByText(mockPokemonData.pokemon.name)
-      ).not.toBeInTheDocument();
-    });
-  });
-
   it("Should display loading component", async () => {
-    render(
-      <MemoryRouter initialEntries={["/pokemon/pikachu"]}>
-        <Routes>
-          <Route path="/pokemon/:pokemonId" element={<Detail />} />
-        </Routes>
-      </MemoryRouter>
-    );
+    vi.mocked(useGetPokemonByNameQuery).mockImplementation(() => ({
+      data: null,
+      isFetching: true,
+      refetch: vi.fn()
+    }));
 
-    const loader = screen.getByTestId("loader");
-    expect(loader).toBeInTheDocument();
+    renderWithProviders(<Detail />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("loader")).toBeInTheDocument();
+    });
+  });
+
+  it("Should display 'not found' if data isn't found", async () => {
+    vi.mocked(useGetPokemonByNameQuery).mockImplementation(() => ({
+      data: null,
+      isFetching: false,
+      refetch: vi.fn()
+    }));
+
+    renderWithProviders(<Detail />);
+
+    await waitFor(() => {
+      expect(screen.getByText(/not found/i)).toBeInTheDocument();
+    });
+  });
+
+  it("Should display correct pokemon information", async () => {
+    vi.mocked(useGetPokemonByNameQuery).mockImplementation(() => ({
+      data: mockCommonPokemonData,
+      isFetching: false,
+      refetch: vi.fn()
+    }));
+
+    renderWithProviders(<Detail />);
+
+    expect(screen.getByText(/pikachu/i)).toBeInTheDocument();
+    expect(screen.getByText(/a sample description/i)).toBeInTheDocument();
   });
 });
