@@ -3,6 +3,9 @@ import { useCallback, useState } from "react";
 const key = "term";
 
 const getFromLocalStorage = (key: string): string => {
+  if (typeof window === "undefined") {
+    return "";
+  }
   const value = localStorage.getItem(key);
   return value ? value : "";
 };

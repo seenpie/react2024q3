@@ -1,46 +1,44 @@
-import { FormEvent, useCallback, useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useState } from "react";
 import Buggy from "../UI/Buggy/Buggy.tsx";
 import Input from "../UI/Input/Input.tsx";
 import classes from "./Header.module.scss";
 import { useLocalStorage } from "../../hooks/useLocalStorage.tsx";
-import { useSearchParams } from "react-router-dom";
 import ThemeSwitcher from "../UI/ThemeSwitcher/ThemeSwitcher.tsx";
+import { useRouter } from "next/router";
 
-function Header() {
-  const [inputValue, setInputValue] = useState<string>("");
+export function Header() {
   const { lsValue, updateLsValue } = useLocalStorage();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [inputValue, setInputValue] = useState<string>(() => lsValue);
+  const router = useRouter();
 
   const handleSearch = useCallback(async (): Promise<void> => {
     const value = inputValue.trim().toLowerCase();
-    let searchParamsValue = value;
-
-    if (!value) {
-      searchParamsValue = "";
+    if (value === router.query.search || (!value && !router.query.search))
+      return;
+    if (value) {
+      await router.replace({
+        query: { search: value }
+      });
+    } else {
+      await router.replace({
+        query: {}
+      });
     }
+    updateLsValue(value ?? "");
+  }, [inputValue, updateLsValue, router]);
 
-    setSearchParams({ search: searchParamsValue });
-    updateLsValue(value);
-  }, [inputValue, updateLsValue, setSearchParams]);
-
-  const handleInput = useCallback((event: FormEvent): void => {
-    const target = event.target as HTMLInputElement;
-    setInputValue(target.value);
-  }, []);
-
-  useEffect(() => {
-    if (lsValue) {
-      const newSearchParams = new URLSearchParams(searchParams.toString());
-      newSearchParams.set("search", lsValue);
-      setInputValue(lsValue);
-      setSearchParams(newSearchParams);
-    }
-  }, [lsValue, setSearchParams, searchParams]);
+  const handleInput = useCallback(
+    (event: ChangeEvent<HTMLInputElement>): void => {
+      setInputValue(event.target.value);
+    },
+    []
+  );
 
   return (
     <header className={classes.header}>
       <div>
         <Input
+          focus
           onClick={handleSearch}
           value={inputValue}
           onChange={handleInput}
@@ -53,5 +51,3 @@ function Header() {
     </header>
   );
 }
-
-export default Header;

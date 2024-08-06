@@ -1,13 +1,14 @@
-import { FormEvent, KeyboardEvent } from "react";
+import { ChangeEvent, KeyboardEvent, useEffect, useRef } from "react";
 import classes from "./Input.module.scss";
 import { GoSearch } from "react-icons/go";
 
 interface IInputProps {
   onClick?: () => void;
-  onChange?: (event: FormEvent) => void;
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   value: string;
   className?: string;
+  focus?: boolean;
 }
 
 function Input({
@@ -15,8 +16,10 @@ function Input({
   onChange,
   value,
   placeholder,
-  className
+  className,
+  focus
 }: IInputProps) {
+  const ref = useRef<HTMLInputElement>(null);
   const handleKeyDown = (event: KeyboardEvent): void => {
     if (event.key === "Enter") {
       event.preventDefault();
@@ -24,9 +27,16 @@ function Input({
     }
   };
 
+  useEffect(() => {
+    if (focus) {
+      ref.current?.focus();
+    }
+  });
+
   return (
     <div className={`${classes.search} ${className}`}>
       <input
+        ref={ref}
         className={classes.input}
         type="text"
         placeholder={placeholder ?? "#pokemon name"}

@@ -1,65 +1,32 @@
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import {
-  AppDispatch,
-  useGetPokemonByNameQuery,
-  useGetPokemonDescriptionByNameQuery
-} from "../../state";
-import { useEffect, useMemo } from "react";
-import { useDispatch } from "react-redux";
-import { addSelectedItem } from "../../state/pageData/pageDataSlice.ts";
-import { ISelectedItemData } from "../../state/pageData/interfaces.ts";
-import { getPokemonImage } from "../../helpers";
+import { useMemo } from "react";
+import { ISelectedItemData } from "@/state/pageData/interfaces.ts";
+import { getPokemonImage } from "@/helpers";
+import { useRouter } from "next/router";
+import { IPokemon } from "@/state/interfaces";
 
-export function useDetail() {
-  const { pokemonId } = useParams();
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
+export function useDetail(data: IPokemon) {
+  const router = useRouter();
+  const { pokemon, ...restQueries } = router.query;
 
-  const imageUrl = pokemonId ? getPokemonImage(pokemonId) : "";
+  const imageUrl = pokemon ? getPokemonImage(pokemon as string) : "";
 
-  const { isFetching: isCommonPokemonDataFetching, data: commonPokemonData } =
-    useGetPokemonByNameQuery({
-      pokemonName: pokemonId || ""
-    });
-
-  const {
-    isFetching: isDescriptionPokemonDataFetching,
-    data: descriptionPokemonData
-  } = useGetPokemonDescriptionByNameQuery({
-    descriptionUrl: commonPokemonData?.species.url ?? ""
-  });
-
-  const pokemonData: ISelectedItemData | null = useMemo(() => {
-    if (!commonPokemonData || !descriptionPokemonData?.flavor_text_entries)
-      return null;
+  const parsedPokemonData: ISelectedItemData | null = useMemo(() => {
     return {
-      name: commonPokemonData.name,
-      description:
-        descriptionPokemonData.flavor_text_entries
-          .find((item) => item.language.name === "en")
-          ?.flavor_text.replace(/\n/g, " ") || "not found description",
+      name: data.name,
+      height: data.height,
+      weight: data.weight,
+      happiness: data.base_experience,
+      type: data.types[0].type.name,
       image: imageUrl
     };
-  }, [commonPokemonData, descriptionPokemonData, imageUrl]);
+  }, [data, imageUrl]);
 
-  useEffect(() => {
-    if (pokemonData) {
-      dispatch(addSelectedItem(pokemonData));
-    }
-  }, [pokemonData, dispatch]);
-
-  const handleClose = () => {
-    const path = searchParams ? `/?${searchParams}` : "/";
-    navigate(path);
+  const handleClose = async () => {
+    await router.replace({ query: { ...restQueries } });
   };
 
-  const isLoading =
-    isCommonPokemonDataFetching || isDescriptionPokemonDataFetching;
-
   return {
-    isLoading,
     handleClose,
-    pokemonData
+    parsedPokemonData
   } as const;
 }

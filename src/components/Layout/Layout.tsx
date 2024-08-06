@@ -6,13 +6,13 @@ interface ILayoutProps {
   children: ReactNode;
 }
 
-function Layout({ children }: ILayoutProps) {
+export function Layout({ children }: ILayoutProps) {
   const { theme } = useContext(ThemeContext);
   return (
-    <div className={classes.layout} data-theme={theme}>
-      {children}
+    <div id="root">
+      <div className={classes.layout} data-theme={theme}>
+        {children}
+      </div>
     </div>
   );
 }
-
-export default Layout;

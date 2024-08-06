@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import {
   useLazyGetPokemonByNameQuery,
   useLazyGetPokemonDescriptionByNameQuery
-} from "../state";
+} from "@/state";
 import { IPokemon, IPokemonSpecies } from "../state/interfaces.ts";
 
 export interface IData {

@@ -8,7 +8,10 @@ export interface IPageParams {
 
 export interface ISelectedItemData {
   name: string;
-  description: string;
+  height: number;
+  weight: number;
+  type: string;
+  happiness: number;
   image: string;
 }
 

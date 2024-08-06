@@ -1,4 +1,3 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
 import classes from "./Card.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -6,8 +5,9 @@ import {
   AppDispatch,
   removePokemonFromList,
   RootState
-} from "../../state";
+} from "@/state";
 import { FormEvent, useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 interface ICardProps {
   name: string;
@@ -15,8 +15,7 @@ interface ICardProps {
 }
 
 function Card({ name, className }: ICardProps) {
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
+  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const tokens = useSelector(
     (state: RootState) => state.favoritePokemonList.pokemonList
@@ -27,10 +26,6 @@ function Card({ name, className }: ICardProps) {
     setIsChecked(tokens.includes(name));
   }, [tokens, name]);
 
-  const path = searchParams
-    ? `/pokemon/${name}?${searchParams}`
-    : `/pokemon/${name}`;
-
   const handleCheckboxClick = (event: FormEvent) => {
     event.stopPropagation();
     if (isChecked) {
@@ -40,8 +35,8 @@ function Card({ name, className }: ICardProps) {
     }
   };
 
-  const redirect = () => {
-    navigate(path);
+  const redirect = async () => {
+    await router.replace({ query: { ...router.query, pokemon: name } });
   };
 
   return (

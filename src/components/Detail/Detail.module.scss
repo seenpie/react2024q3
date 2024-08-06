@@ -6,6 +6,7 @@
   position: relative;
   padding-top: 18px;
   flex: 1;
+  max-width: 800px;
 }
 
 .button {
@@ -26,9 +27,8 @@
   justify-content: center;
   flex-direction: column;
   overflow: hidden;
-  width: fit-content;
+  width: 100%;
   border-radius: 15px 0 15px 15px;
-  max-width: 1000px;
 
   &__wrapper {
     display: flex;
@@ -58,5 +58,14 @@
     > h2 {
       font-size: 3rem;
     }
+  }
+}
+
+.detailInfo {
+  > div {
+    &:first-child {
+      margin-top: 10px;
+    }
+    font-weight: 600;
   }
 }
