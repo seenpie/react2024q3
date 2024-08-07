@@ -1,9 +1,13 @@
+/// <reference types="vitest/globals" />
+import "@testing-library/jest-dom";
+
 import createFetchMock from "vitest-fetch-mock";
 import { afterEach, vi } from "vitest";
 import { cleanup } from "@testing-library/react";
-import "@testing-library/jest-dom";
 
 const fetchMocker = createFetchMock(vi);
+
+vi.mock("next/router", () => vi.importActual("next-router-mock"));
 
 fetchMocker.enableMocks();
 

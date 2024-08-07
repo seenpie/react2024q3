@@ -1,56 +1,37 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { renderWithProviders } from "../utils/test.utils.tsx";
-import { Main } from "../../components/Main/Main.tsx";
+import { renderWithProviders } from "@/__tests__/testUtils/test.utils.tsx";
+import { Main } from "@/components/Main/Main.tsx";
 import { screen } from "@testing-library/react";
-import { useGetPokemonsQuery } from "../../state";
 
 const totalItems = 180;
 const itemList = Array.from({ length: totalItems }).map((_, i) => ({
   name: `item${i + 1}`,
   url: ""
 }));
+const offset = 0;
+const limit = 40;
 
-const createReturnedData = ({ start, end }: { start: number; end: number }) => {
-  return {
-    count: totalItems,
-    next: "",
-    previous: "",
-    results: itemList.slice(start, end)
-  };
-};
-
-vi.mock("../../state", async (importOriginal) => {
-  const originalModule = await importOriginal();
-
-  if (typeof originalModule !== "object" || originalModule === null) {
-    throw new Error("importOriginal did not return an object");
-  }
-
-  return {
-    ...originalModule,
-    useGetPokemonsQuery: vi.fn(() => ({
-      data: null,
-      isFetching: true
-    }))
-  };
-});
+const cards = itemList.slice(0, limit);
 
 describe("Main", () => {
-  beforeEach(() => {
-    vi.resetAllMocks();
-  });
-
   it("Should correct display cardList and Pagination", () => {
-    vi.mocked(useGetPokemonsQuery).mockImplementation(() => ({
-      data: createReturnedData,
-      isFetching: false,
-      refetch: vi.fn()
-    }));
+    renderWithProviders(
+      <Main
+        totalCards={totalItems}
+        cards={cards}
+        offset={offset}
+        limit={limit}
+      />
+    );
 
-    renderWithProviders(<Main children={""} />);
+    const lastPage = Math.ceil(totalItems / limit);
+    const moveToLastPageButton = screen.getByRole("button", {
+      name: lastPage.toString()
+    });
+    expect(moveToLastPageButton).toBeInTheDocument();
 
-    console.log("Rendered component");
-
-    expect(screen.getByText("not results")).toBeInTheDocument();
+    const firstItem = screen.getByText("item1");
+    const lastItem = screen.getByText("item40");
+    expect(firstItem).toBeInTheDocument();
+    expect(lastItem).toBeInTheDocument();
   });
 });

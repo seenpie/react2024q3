@@ -1,6 +1,5 @@
-import { describe, expect, it } from "vitest";
-import { renderWithProviders } from "../utils/test.utils.tsx";
-import { mockState } from "../utils/mockState.utils.ts";
+import { renderWithProviders } from "@/__tests__/testUtils/test.utils.tsx";
+import { mockState } from "@/__tests__/testUtils/mocks.ts";
 import { screen } from "@testing-library/react";
 import Pagination from "../../components/UI/Pagination/Pagination.tsx";
 
@@ -22,9 +21,12 @@ const localMockState = {
 
 describe("Pagination", () => {
   it("Should render correct amounts of page", async () => {
-    renderWithProviders(<Pagination onClick={() => {}} />, {
-      preloadedState: localMockState
-    });
+    renderWithProviders(
+      <Pagination offset={0} limit={limit} totalCards={totalItems} />,
+      {
+        preloadedState: localMockState
+      }
+    );
 
     const button = screen.getByRole("button", { name: `${totalPage}` });
     expect(button).toBeInTheDocument();

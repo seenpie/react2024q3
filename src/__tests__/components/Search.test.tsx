@@ -1,23 +1,24 @@
-import { beforeEach, describe, expect, it } from "vitest";
-import { fireEvent, render, screen } from "@testing-library/react";
-import Header from "../../components/Header/Header.tsx"; // Убедитесь, что путь к компоненту правильный
-import { MemoryRouter } from "react-router-dom";
-import { renderWithProviders } from "../utils/test.utils.tsx";
+import { fireEvent, screen } from "@testing-library/react";
+import { Header } from "../../components/Header/Header.tsx";
+import { renderWithProviders } from "@/__tests__/testUtils/test.utils.tsx";
+import userEvent from "@testing-library/user-event";
 
 describe("Search", () => {
   beforeEach(() => {
     localStorage.clear();
   });
+
   const localStorageKey = "term";
 
   it("Should save the entered value to the local storage", async () => {
     renderWithProviders(<Header />);
+    const user = userEvent.setup();
 
     const inputElement = screen.getByPlaceholderText("#pokemon name");
     const searchButton = screen.getByTestId("searchBtn");
 
     fireEvent.input(inputElement, { target: { value: "pikachu" } });
-    fireEvent.click(searchButton);
+    await user.click(searchButton);
 
     expect(localStorage.getItem("term")).toBe("pikachu");
   });
@@ -25,11 +26,7 @@ describe("Search", () => {
   it("Should retrieve the value from local storage upon mounting", () => {
     localStorage.setItem(localStorageKey, "charmander");
 
-    render(
-      <MemoryRouter>
-        <Header />
-      </MemoryRouter>
-    );
+    renderWithProviders(<Header />);
 
     const inputElement = screen.getByPlaceholderText("#pokemon name");
     expect(inputElement).toHaveValue("charmander");

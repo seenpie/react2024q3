@@ -1,6 +1,5 @@
-import { mockState } from "../utils/mockState.utils.ts";
-import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
-import { renderWithProviders } from "../utils/test.utils.tsx";
+import { mockState } from "@/__tests__/testUtils/mocks.ts";
+import { renderWithProviders } from "@/__tests__/testUtils/test.utils.tsx";
 import { Footer } from "../../components/Footer/Footer.tsx";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 
