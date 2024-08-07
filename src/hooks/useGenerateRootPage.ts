@@ -24,7 +24,7 @@ export function useGenerateRootPage({
 
   let pageOffset = offset;
   let cards: IResource[];
-  let totalCards: number = 0;
+  let totalCards: number;
 
   const { count, results } = data;
   cards = results;
