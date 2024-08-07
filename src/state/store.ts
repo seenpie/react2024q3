@@ -25,4 +25,4 @@ export type AppState = ReturnType<typeof makeStore>;
 export type RootState = ReturnType<AppState["getState"]>;
 export type AppDispatch = AppState["dispatch"];
 
-export const wrapper = createWrapper<AppState>(makeStore, { debug: true });
+export const wrapper = createWrapper<AppState>(makeStore);
