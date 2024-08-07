@@ -6,13 +6,16 @@ import {
   getPokemonByName,
   getPokemons,
   getRunningQueriesThunk,
+  RootState,
+  useGetPokemonByNameQuery,
+  useGetPokemonsQuery,
   wrapper
 } from "@/state";
 import { GetServerSideProps, NextPage } from "next";
 import { useSelector } from "react-redux";
-import { RootState } from "@/state";
 import { Detail } from "@/components/Detail/Detail";
 import { useGenerateRootPage } from "@/hooks/useGenerateRootPage";
+import { useRouter } from "next/router";
 
 const itemsPageLimit = 40;
 
@@ -22,19 +25,34 @@ interface IRootPageProps {
 }
 
 const Root: NextPage<IRootPageProps> = ({ offset, limit }) => {
+  const router = useRouter();
   const favoriteList = useSelector(
     (state: RootState) => state.favoritePokemonList.pokemonList
   );
+  const { pokemon, page, search } = router.query;
 
-  const { cards, totalCards, pageOffset, pokemonData, pokemon } =
-    useGenerateRootPage({
-      offset,
-      limit,
-      itemsPageLimit
-    });
+  const { data } = useGetPokemonsQuery(
+    { offset, limit },
+    { skip: router.isFallback }
+  );
+
+  const { data: pokemonData } = useGetPokemonByNameQuery(
+    {
+      pokemonName: pokemon as string
+    },
+    { skip: !pokemon }
+  );
+
+  const { cards, totalCards, pageOffset } = useGenerateRootPage({
+    offset,
+    search: search ? (search as string) : search,
+    page: page ? (page as string) : page,
+    itemsPageLimit,
+    data
+  });
 
   if (!cards) {
-    return;
+    return <div>Service isn't available</div>;
   }
 
   return (
@@ -46,7 +64,7 @@ const Root: NextPage<IRootPageProps> = ({ offset, limit }) => {
         offset={pageOffset}
         limit={itemsPageLimit}
       >
-        {pokemon && pokemonData && <Detail data={pokemonData} />}
+        {pokemon && <Detail data={pokemonData} />}
       </Main>
       {!!favoriteList.length && <Footer />}
     </>
