@@ -2,7 +2,7 @@ import { IPokemon } from "@/state/interfaces";
 import classes from "./Detail.module.scss";
 import { useDetail } from "@/components/Detail/Detail.hooks.ts";
 
-export function Detail({ data }: { data: IPokemon }) {
+export function Detail({ data }: { data: IPokemon | undefined }) {
   const { parsedPokemonData, handleClose } = useDetail(data);
 
   if (!parsedPokemonData) {
