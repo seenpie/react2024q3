@@ -1,5 +1,5 @@
 import { IResource } from "@/state/interfaces.ts";
-import Card from "../Card/Card.tsx";
+import { Card } from "../Card/Card.tsx";
 import classes from "./CardList.module.scss";
 
 export interface ICardListProps {
@@ -22,7 +22,7 @@ export function CardList({ cards, totalCards }: ICardListProps) {
           </section>
         </>
       ) : (
-        <span>not results</span>
+        <span>no results</span>
       )}
     </div>
   );

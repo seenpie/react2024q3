@@ -14,7 +14,7 @@ interface ICardProps {
   className?: string;
 }
 
-function Card({ name, className }: ICardProps) {
+export function Card({ name, className }: ICardProps) {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const tokens = useSelector(
@@ -40,15 +40,18 @@ function Card({ name, className }: ICardProps) {
   };
 
   return (
-    <div className={`${classes.card} ${className}`} onClick={redirect}>
+    <div
+      className={`${classes.card} ${className}`}
+      onClick={redirect}
+      aria-label="card"
+    >
       <span>{name}</span>
       <span
         className={classes.card__checkbox}
         onClick={handleCheckboxClick}
         data-checked={isChecked}
+        aria-label="checkbox"
       />
     </div>
   );
 }
-
-export default Card;
