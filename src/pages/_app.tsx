@@ -1,7 +1,7 @@
 import { AppProps } from "next/app";
 import { wrapper } from "@/state";
 import { Provider } from "react-redux";
-import ErrorBoundary from "../components/ErrorBaundary.tsx";
+import ErrorBoundary from "@/components/ErrorBoundary.tsx";
 import ThemeProvider from "../context/ThemeContext/ThemeProvider.tsx";
 import "../assets/styles/global.css";
 import Head from "next/head";
