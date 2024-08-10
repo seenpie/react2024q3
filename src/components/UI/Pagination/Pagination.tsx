@@ -1,7 +1,9 @@
+"use client";
+
 import { FormEvent, useCallback, useState } from "react";
 import Input from "../Input/Input.tsx";
 import classes from "./Pagination.module.scss";
-import { checkInputValue } from "../../../utils/pagination.utils.ts";
+import { checkInputValue } from "@/utils/pagination.utils.ts";
 import { IUsePaginationProps, usePagination } from "./Pagination.hooks.ts";
 
 interface IPaginationProps extends IUsePaginationProps {}
@@ -15,13 +17,13 @@ function Pagination({ offset, totalCards, limit }: IPaginationProps) {
       totalCards
     });
 
-  const handleClick = useCallback(async (): Promise<void> => {
+  const handleClick = useCallback((): void => {
     const checkedInputValue: number | null = checkInputValue(
       Number(inputValue),
       totalPage
     );
     if (checkedInputValue) {
-      await handlePaginationClick(checkedInputValue);
+      handlePaginationClick(checkedInputValue);
     }
   }, [inputValue, totalPage, handlePaginationClick]);
 

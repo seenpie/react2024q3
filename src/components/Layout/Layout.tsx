@@ -1,3 +1,5 @@
+"use client";
+
 import { ReactNode, useContext } from "react";
 import classes from "./Layout.module.scss";
 import { ThemeContext } from "../../context/ThemeContext/ThemeContext.tsx";

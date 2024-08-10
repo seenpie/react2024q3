@@ -1,3 +1,5 @@
+"use client";
+
 import { ReactNode, useCallback, useState } from "react";
 import { Theme, ThemeContext } from "./ThemeContext.tsx";
 

@@ -1,3 +1,5 @@
+"use client";
+
 import classes from "./Card.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -7,7 +9,7 @@ import {
   RootState
 } from "@/state";
 import { FormEvent, useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface ICardProps {
   name: string;
@@ -16,6 +18,7 @@ interface ICardProps {
 
 export function Card({ name, className }: ICardProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const dispatch = useDispatch<AppDispatch>();
   const tokens = useSelector(
     (state: RootState) => state.favoritePokemonList.pokemonList
@@ -35,8 +38,17 @@ export function Card({ name, className }: ICardProps) {
     }
   };
 
-  const redirect = async () => {
-    await router.replace({ query: { ...router.query, pokemon: name } });
+  const redirect = () => {
+    const { page, search } = {
+      page: searchParams?.get("page"),
+      search: searchParams?.get("search")
+    };
+    const newQuery = new URLSearchParams({
+      pokemon: name,
+      ...(page && { page }),
+      ...(search && { search })
+    }).toString();
+    router.replace(`?${newQuery}`);
   };
 
   return (

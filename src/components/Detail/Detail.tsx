@@ -1,27 +1,43 @@
-import { IPokemon } from "@/state/interfaces";
 import classes from "./Detail.module.scss";
-import { useDetail } from "@/components/Detail/Detail.hooks.ts";
+import { getPokemonImage } from "@/helpers";
+import { ISelectedItemData } from "@/state/pageData/interfaces.ts";
+import { CloseDetailButton } from "@/components/Detail/CloseDetailButton/CloseDetailButton.tsx";
+import Image from "next/image";
+import { getPokemonByName } from "@/services";
 
-export function Detail({ data }: { data: IPokemon | undefined }) {
-  const { parsedPokemonData, handleClose } = useDetail(data);
+export async function Detail({ name }: { name: string }) {
+  const data = await getPokemonByName(name);
 
-  if (!parsedPokemonData) {
+  if (!data) {
     return (
       <aside className={classes.wrapper}>
-        <div>not found</div>
+        <div className={classes.notFound}>not found</div>
       </aside>
     );
   }
 
+  const parsedPokemonData: ISelectedItemData | null = {
+    name: data.name,
+    height: data.height,
+    weight: data.weight,
+    experience: data.base_experience,
+    type: data.types[0].type.name,
+    image: getPokemonImage(data.name)
+  };
+
   return (
     <aside className={classes.wrapper}>
-      <button className={classes.button} onClick={handleClose}>
-        #close
-      </button>
+      <CloseDetailButton className={classes.button} />
       <div className={classes.pokemon__wrapper}>
         <div className={classes.pokemon}>
           <div className={classes.image}>
-            <img src={parsedPokemonData.image} alt={parsedPokemonData.name} />
+            <Image
+              src={parsedPokemonData.image}
+              alt={parsedPokemonData.name}
+              width={350}
+              height={350}
+              loading="eager"
+            />
           </div>
           <div className={classes.information}>
             <div className={classes.information__name}>
@@ -32,7 +48,7 @@ export function Detail({ data }: { data: IPokemon | undefined }) {
               Info:
               <div>height: {parsedPokemonData.height}</div>
               <div>weight: {parsedPokemonData.weight}</div>
-              <div>happiness: {parsedPokemonData.happiness}</div>
+              <div>experience: {parsedPokemonData.experience}</div>
               <div>type: {parsedPokemonData.type}</div>
             </div>
           </div>

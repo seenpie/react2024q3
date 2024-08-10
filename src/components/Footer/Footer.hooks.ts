@@ -1,8 +1,8 @@
-import { AppDispatch, cleanPokemonList, RootState } from "../../state";
-import { useFetchPokemonData } from "../../hooks/useFetchPokemonData.tsx";
+import { AppDispatch, cleanPokemonList, RootState } from "@/state";
+import { useFetchPokemonData } from "@/hooks/useFetchPokemonData.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import { useCallback, useEffect, useState } from "react";
-import { formatPokemonDataToCSV, parsePokemonsData } from "../../helpers";
+import { formatPokemonDataToCSV, parsePokemonsData } from "@/helpers";
 
 export function useFooter() {
   const [href, setHref] = useState("");

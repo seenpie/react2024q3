@@ -1,31 +1,41 @@
-import { ChangeEvent, useCallback, useState } from "react";
+"use client";
+
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import Buggy from "../UI/Buggy/Buggy.tsx";
 import Input from "../UI/Input/Input.tsx";
 import classes from "./Header.module.scss";
 import { useLocalStorage } from "../../hooks/useLocalStorage.tsx";
 import ThemeSwitcher from "../UI/ThemeSwitcher/ThemeSwitcher.tsx";
-import { useRouter } from "next/router";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export function Header() {
   const { lsValue, updateLsValue } = useLocalStorage();
   const [inputValue, setInputValue] = useState<string>(() => lsValue);
   const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const handleSearch = useCallback(async (): Promise<void> => {
+  useEffect(() => {
+    if (lsValue) {
+      const newQuery = new URLSearchParams({ search: lsValue }).toString();
+      router.push(`?${newQuery}`);
+    }
+  }, [lsValue, router]);
+
+  const handleSearch = (): void => {
     const value = inputValue.trim().toLowerCase();
-    if (value === router.query.search || (!value && !router.query.search))
+    const search = searchParams?.get("search");
+    if (value === search) {
       return;
+    }
+
     if (value) {
-      await router.replace({
-        query: { search: value }
-      });
+      const newQuery = new URLSearchParams({ search: value }).toString();
+      router.push(`?${newQuery}`);
     } else {
-      await router.replace({
-        query: {}
-      });
+      router.push("/");
     }
     updateLsValue(value ?? "");
-  }, [inputValue, updateLsValue, router]);
+  };
 
   const handleInput = useCallback(
     (event: ChangeEvent<HTMLInputElement>): void => {
@@ -38,7 +48,6 @@ export function Header() {
     <header className={classes.header}>
       <div>
         <Input
-          focus
           onClick={handleSearch}
           value={inputValue}
           onChange={handleInput}

@@ -3,8 +3,8 @@ import {
   calculateCurrentPage,
   collectPaginationItems,
   countTotalPages
-} from "../../../utils/pagination.utils.ts";
-import { useRouter } from "next/router";
+} from "@/utils/pagination.utils.ts";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export interface IUsePaginationProps {
   offset: number;
@@ -18,6 +18,7 @@ export function usePagination({
   totalCards
 }: IUsePaginationProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const totalPage = useMemo(
     () => countTotalPages(totalCards, limit),
     [totalCards, limit]
@@ -30,8 +31,15 @@ export function usePagination({
     () => collectPaginationItems(currentPage, totalPage),
     [currentPage, totalPage]
   );
-  const handlePaginationClick = async (pageNumber: number) => {
-    await router.replace({ query: { ...router.query, page: pageNumber } });
+  const handlePaginationClick = (pageNumber: number) => {
+    const search = searchParams && searchParams.get("search");
+    const pokemon = searchParams && searchParams.get("pokemon");
+    const newQuery = new URLSearchParams({
+      page: `${pageNumber}`,
+      ...(search && { search }),
+      ...(pokemon && { pokemon })
+    }).toString();
+    router.push(`?${newQuery}`);
   };
 
   return { totalPage, currentPage, paginationItems, handlePaginationClick };
