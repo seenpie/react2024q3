@@ -1,4 +1,4 @@
-import { ChangeEvent, KeyboardEvent, useEffect, useRef } from "react";
+import { ChangeEvent, KeyboardEvent, useRef } from "react";
 import classes from "./Input.module.scss";
 import { GoSearch } from "react-icons/go";
 
@@ -8,7 +8,6 @@ interface IInputProps {
   placeholder?: string;
   value: string;
   className?: string;
-  focus?: boolean;
 }
 
 function Input({
@@ -16,8 +15,7 @@ function Input({
   onChange,
   value,
   placeholder,
-  className,
-  focus
+  className
 }: IInputProps) {
   const ref = useRef<HTMLInputElement>(null);
   const handleKeyDown = (event: KeyboardEvent): void => {
@@ -26,12 +24,6 @@ function Input({
       onClick?.();
     }
   };
-
-  useEffect(() => {
-    if (focus) {
-      ref.current?.focus();
-    }
-  });
 
   return (
     <div className={`${classes.search} ${className}`}>
