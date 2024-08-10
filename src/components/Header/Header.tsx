@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import Buggy from "../UI/Buggy/Buggy.tsx";
 import Input from "../UI/Input/Input.tsx";
 import classes from "./Header.module.scss";
@@ -11,21 +11,34 @@ export function Header() {
   const [inputValue, setInputValue] = useState<string>(() => lsValue);
   const router = useRouter();
 
+  const redirect = useCallback(
+    async (queries: { search: string } | Record<string, never>) => {
+      await router.replace({
+        query: queries
+      });
+    },
+    [router]
+  );
+
+  useEffect(() => {
+    const checkValue = router.query.search ?? "";
+
+    if (checkValue !== lsValue) {
+      redirect({ search: lsValue });
+    }
+  }, [lsValue, redirect, router]);
+
   const handleSearch = useCallback(async (): Promise<void> => {
     const value = inputValue.trim().toLowerCase();
     if (value === router.query.search || (!value && !router.query.search))
       return;
     if (value) {
-      await router.replace({
-        query: { search: value }
-      });
+      await redirect({ search: value });
     } else {
-      await router.replace({
-        query: {}
-      });
+      await redirect({});
     }
     updateLsValue(value ?? "");
-  }, [inputValue, updateLsValue, router]);
+  }, [inputValue, updateLsValue, router, redirect]);
 
   const handleInput = useCallback(
     (event: ChangeEvent<HTMLInputElement>): void => {
