@@ -18,7 +18,9 @@ export function useGenerateRootPage({
 }: IGenerateRootPageProps) {
   if (!data) {
     return {
-      cards: null
+      cards: [],
+      totalCards: 0,
+      pageOffset: offset
     };
   }
 
