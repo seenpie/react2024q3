@@ -7,13 +7,14 @@ import { RootState } from "@/state";
 const cardData = "valid data";
 const mockReplace = vi.fn();
 
-vi.mock("next/router", () => ({
+vi.mock("next/navigation", () => ({
   useRouter: () => ({
     query: {
       pokemon: "/"
     },
     replace: mockReplace
-  })
+  }),
+  useSearchParams: vi.fn()
 }));
 
 describe("Card", () => {
@@ -36,9 +37,7 @@ describe("Card", () => {
 
     await user.click(card);
 
-    expect(mockReplace).toHaveBeenCalledWith({
-      query: { pokemon: cardData }
-    });
+    expect(mockReplace).toHaveBeenCalledWith("?pokemon=valid+data");
   });
 
   it("Should correct add and remove favorites from list", async () => {

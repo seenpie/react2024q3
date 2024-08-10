@@ -1,15 +1,19 @@
 /// <reference types="vitest/globals" />
 import "@testing-library/jest-dom";
-
-import createFetchMock from "vitest-fetch-mock";
-import { afterEach, vi } from "vitest";
+import { afterEach } from "vitest";
 import { cleanup } from "@testing-library/react";
+import { server } from "@/__tests__/testUtils/msw/server.ts";
 
-const fetchMocker = createFetchMock(vi);
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
 
-vi.mock("next/router", () => vi.importActual("next-router-mock"));
-
-fetchMocker.enableMocks();
+vi.mock("next/navigation", () => ({
+  useRouter: vi.fn(() => ({ push: vi.fn(), replace: vi.fn() })),
+  useSearchParams: vi.fn(() => ({
+    get: () => ""
+  }))
+}));
 
 afterEach(() => {
   cleanup();

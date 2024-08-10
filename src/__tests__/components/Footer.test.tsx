@@ -1,7 +1,8 @@
 import { mockState } from "@/__tests__/testUtils/mocks.ts";
 import { renderWithProviders } from "@/__tests__/testUtils/test.utils.tsx";
 import { Footer } from "../../components/Footer/Footer.tsx";
-import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 const originalCreateObjectURL = globalThis.URL.createObjectURL;
 
@@ -34,15 +35,17 @@ describe("Footer", () => {
   });
 
   it("Should clear pokemon list", async () => {
+    const user = userEvent.setup();
     renderWithProviders(<Footer />, {
       preloadedState: localMockState
     });
 
-    await waitFor(() => {
-      const button = screen.getByRole("button", { name: "unselected all" });
-      fireEvent.click(button);
-    });
+    const footer = screen.getByLabelText("favorites");
+    expect(footer).toBeInTheDocument();
 
-    expect(screen.getByText(`selected ${0} pokemon`));
+    const button = screen.getByRole("button", { name: "unselected all" });
+    await user.click(button);
+
+    expect(footer).not.toBeInTheDocument();
   });
 });

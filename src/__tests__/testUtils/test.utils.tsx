@@ -5,12 +5,10 @@ import ThemeProvider from "@/context/ThemeContext/ThemeProvider.tsx";
 import { Provider } from "react-redux";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { pageDataSlice } from "@/state/pageData/pageDataSlice.ts";
 import { favoritePokemonListSlice, pokemonApi } from "@/state";
 
 const rootReducer = combineReducers({
   favoritePokemonList: favoritePokemonListSlice.reducer,
-  pageData: pageDataSlice.reducer,
   [pokemonApi.reducerPath]: pokemonApi.reducer
 });
 

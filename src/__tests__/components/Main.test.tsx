@@ -12,15 +12,20 @@ const limit = 40;
 
 const cards = itemList.slice(0, limit);
 
+vi.mock("@/hooks/useGenerateRootPage.ts", () => ({
+  useGenerateRootPage: () => ({
+    cards,
+    pageOffset: offset,
+    totalCards: totalItems
+  })
+}));
+
 describe("Main", () => {
-  it("Should correct display cardList and Pagination", () => {
+  it("Should correct display cardList and Pagination", async () => {
     renderWithProviders(
-      <Main
-        totalCards={totalItems}
-        cards={cards}
-        offset={offset}
-        limit={limit}
-      />
+      await (async () => {
+        return await Main({ page: "1", search: "" });
+      })()
     );
 
     const lastPage = Math.ceil(totalItems / limit);

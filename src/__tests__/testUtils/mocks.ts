@@ -34,7 +34,7 @@ export const detailPokemonData: IPokemon = {
 
 export const parsedDetailPokemonData: ISelectedItemData = {
   name: detailPokemonData.name,
-  happiness: detailPokemonData.base_experience,
+  experience: detailPokemonData.base_experience,
   weight: detailPokemonData.weight,
   height: detailPokemonData.height,
   image: "",
