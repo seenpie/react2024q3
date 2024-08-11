@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { screen } from "@testing-library/react";
 import { CardList } from "../../components/CardList/CardList.tsx";
-import { renderWithProviders } from "../utils/test.utils.tsx";
-import { mockState } from "../utils/mockState.utils.ts";
+import { renderWithProviders } from "../testUtils/test.utils.tsx";
+import { createRemixStub } from "@remix-run/testing";
 
 const itemList = [
   { name: "a", url: "" },
@@ -12,22 +12,18 @@ const itemList = [
   { name: "e", url: "" }
 ];
 
-const localMockState = {
-  ...mockState,
-  pageData: {
-    itemList,
-    pageParams: {
-      offset: 0,
-      totalItems: itemList.length,
-      limit: 0
-    },
-    selectedItem: null
-  }
-};
-
 describe("CardList", () => {
   it("Should render the specified number of cards", () => {
-    renderWithProviders(<CardList />, { preloadedState: localMockState });
+    const RemixStub = createRemixStub([
+      {
+        path: "/",
+        Component: () => (
+          <CardList cards={itemList} totalCards={itemList.length} />
+        )
+      }
+    ]);
+
+    renderWithProviders(<RemixStub />);
 
     const header = screen.getByRole("heading");
     expect(header).toHaveTextContent(`total: ${itemList.length}`);

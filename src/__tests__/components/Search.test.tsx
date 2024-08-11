@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { fireEvent, render, screen } from "@testing-library/react";
-import Header from "../../components/Header/Header.tsx"; // Убедитесь, что путь к компоненту правильный
-import { MemoryRouter } from "react-router-dom";
-import { renderWithProviders } from "../utils/test.utils.tsx";
+import { fireEvent, screen } from "@testing-library/react";
+import Header from "../../components/Header/Header.tsx";
+import { renderWithProviders } from "../testUtils/test.utils.tsx";
+import { createRemixStub } from "@remix-run/testing";
 
 describe("Search", () => {
   beforeEach(() => {
@@ -11,7 +11,14 @@ describe("Search", () => {
   const localStorageKey = "term";
 
   it("Should save the entered value to the local storage", async () => {
-    renderWithProviders(<Header />);
+    const RemixStub = createRemixStub([
+      {
+        path: "/",
+        Component: () => <Header />
+      }
+    ]);
+
+    renderWithProviders(<RemixStub />);
 
     const inputElement = screen.getByPlaceholderText("#pokemon name");
     const searchButton = screen.getByTestId("searchBtn");
@@ -24,12 +31,14 @@ describe("Search", () => {
 
   it("Should retrieve the value from local storage upon mounting", () => {
     localStorage.setItem(localStorageKey, "charmander");
+    const RemixStub = createRemixStub([
+      {
+        path: "/",
+        Component: () => <Header />
+      }
+    ]);
 
-    render(
-      <MemoryRouter>
-        <Header />
-      </MemoryRouter>
-    );
+    renderWithProviders(<RemixStub />);
 
     const inputElement = screen.getByPlaceholderText("#pokemon name");
     expect(inputElement).toHaveValue("charmander");
