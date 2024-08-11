@@ -1,0 +1,46 @@
+.search {
+  height: 100%;
+  font-size: 1.4rem;
+  display: flex;
+  border-radius: 2rem;
+  background: var(--background-color);
+  transition: all 0.3s;
+  z-index: 1;
+  position: relative;
+
+  &:focus-within {
+    box-shadow: var(--box-shadow);
+  }
+}
+
+.input {
+  padding: 0.6rem;
+  background-color: transparent;
+  border: none;
+  border-radius: 2rem;
+  width: 100%;
+  color: var(--text-color);
+
+  &:hover {
+    outline: none;
+    border: none;
+  }
+
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+.button {
+  font-size: inherit;
+  cursor: pointer;
+  padding: 0.6rem;
+  border: none;
+  background-color: transparent;
+  transition: all 0.3s;
+  color: var(--text-color);
+
+  &:hover {
+    color: var(--hover-color);
+  }
+}

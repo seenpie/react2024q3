@@ -1,0 +1,3 @@
+npm run lint
+npm run test -- --run
+echo -e "\033[32m pre-commit was success \033[0m"

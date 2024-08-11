@@ -1,0 +1,10 @@
+@import "normalize.css";
+@import "./reset.css";
+@import "./font.css";
+@import "./vars.css";
+
+#root {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+}
