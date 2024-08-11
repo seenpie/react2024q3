@@ -1,19 +1,11 @@
+import { IPokemon } from "../../state/interfaces";
 import classes from "./Detail.module.scss";
-import Loader from "../Loader/Loader";
 import { useDetail } from "./Detail.hooks.ts";
 
-function Detail() {
-  const { isLoading, pokemonData, handleClose } = useDetail();
+export function Detail({ data }: { data: IPokemon | undefined }) {
+  const { parsedPokemonData, handleClose } = useDetail(data);
 
-  if (isLoading) {
-    return (
-      <aside className={classes.wrapper}>
-        <Loader />
-      </aside>
-    );
-  }
-
-  if (!pokemonData) {
+  if (!parsedPokemonData) {
     return (
       <aside className={classes.wrapper}>
         <div>not found</div>
@@ -29,16 +21,19 @@ function Detail() {
       <div className={classes.pokemon__wrapper}>
         <div className={classes.pokemon}>
           <div className={classes.image}>
-            <img src={pokemonData.image} alt={pokemonData.name} />
+            <img src={parsedPokemonData.image} alt={parsedPokemonData.name} />
           </div>
           <div className={classes.information}>
             <div className={classes.information__name}>
               Name:
-              <h2>{pokemonData.name}</h2>
+              <h2>{parsedPokemonData.name}</h2>
             </div>
-            <div>
-              Description:
-              <p>{pokemonData.description}</p>
+            <div className={classes.detailInfo}>
+              Info:
+              <div>height: {parsedPokemonData.height}</div>
+              <div>weight: {parsedPokemonData.weight}</div>
+              <div>experience: {parsedPokemonData.experience}</div>
+              <div>type: {parsedPokemonData.type}</div>
             </div>
           </div>
         </div>
@@ -46,5 +41,3 @@ function Detail() {
     </aside>
   );
 }
-
-export default Detail;

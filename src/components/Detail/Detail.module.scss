@@ -26,9 +26,8 @@
   justify-content: center;
   flex-direction: column;
   overflow: hidden;
-  width: fit-content;
+  width: 100%;
   border-radius: 15px 0 15px 15px;
-  max-width: 1000px;
 
   &__wrapper {
     display: flex;

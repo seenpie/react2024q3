@@ -4,14 +4,20 @@ import {
   collectPaginationItems,
   countTotalPages
 } from "../../../utils/pagination.utils.ts";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../state";
+import { useSearchParams } from "@remix-run/react";
 
-export function usePagination() {
-  const pageData = useSelector((state: RootState) => state.pageData.pageParams);
+export interface IUsePaginationProps {
+  offset: number;
+  limit: number;
+  totalCards: number;
+}
 
-  const { limit, offset, totalItems: totalCards } = pageData;
-
+export function usePagination({
+  limit,
+  offset,
+  totalCards
+}: IUsePaginationProps) {
+  const [searchParams, setSearchParams] = useSearchParams();
   const totalPage = useMemo(
     () => countTotalPages(totalCards, limit),
     [totalCards, limit]
@@ -24,6 +30,11 @@ export function usePagination() {
     () => collectPaginationItems(currentPage, totalPage),
     [currentPage, totalPage]
   );
+  const handlePaginationClick = (pageNumber: number) => {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set("page", String(pageNumber));
+    setSearchParams(newSearchParams);
+  };
 
-  return { totalPage, currentPage, paginationItems };
+  return { totalPage, currentPage, paginationItems, handlePaginationClick };
 }

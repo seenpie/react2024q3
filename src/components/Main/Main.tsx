@@ -1,24 +1,25 @@
 import { ReactNode } from "react";
-import Loader from "../Loader/Loader.tsx";
-import { CardList } from "../CardList/CardList.tsx";
+import { CardList, ICardListProps } from "../CardList/CardList.tsx";
 import classes from "./Main.module.scss";
 import Pagination from "../UI/Pagination/Pagination.tsx";
-import { useMain } from "./Main.hooks.ts";
+import { IUsePaginationProps } from "../UI/Pagination/Pagination.hooks.ts";
 
-interface IMainProps {
-  children: ReactNode;
+interface IMainProps extends ICardListProps, IUsePaginationProps {
+  children?: ReactNode;
 }
 
-export function Main({ children }: IMainProps) {
-  const { isFetching, handlePaginationClick } = useMain();
-
-  if (isFetching) return <Loader />;
-
+export function Main({
+  children,
+  cards,
+  totalCards,
+  offset,
+  limit
+}: IMainProps) {
   return (
     <main className={classes.main}>
       <section className={classes.content}>
-        <CardList />
-        <Pagination onClick={handlePaginationClick} />
+        <CardList totalCards={totalCards} cards={cards} />
+        <Pagination totalCards={totalCards} offset={offset} limit={limit} />
       </section>
       {children}
     </main>

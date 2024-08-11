@@ -2,25 +2,28 @@ import { FormEvent, useCallback, useState } from "react";
 import Input from "../Input/Input.tsx";
 import classes from "./Pagination.module.scss";
 import { checkInputValue } from "../../../utils/pagination.utils.ts";
-import { usePagination } from "./Pagination.hooks.ts";
+import { IUsePaginationProps, usePagination } from "./Pagination.hooks.ts";
 
-interface IPaginationProps {
-  onClick: (pageNumber: number) => void;
-}
+interface IPaginationProps extends IUsePaginationProps {}
 
-function Pagination({ onClick }: IPaginationProps) {
+function Pagination({ offset, totalCards, limit }: IPaginationProps) {
   const [inputValue, setInputValue] = useState("");
-  const { totalPage, currentPage, paginationItems } = usePagination();
+  const { totalPage, currentPage, paginationItems, handlePaginationClick } =
+    usePagination({
+      offset,
+      limit,
+      totalCards
+    });
 
-  const handleClick = useCallback((): void => {
+  const handleClick = useCallback(async (): Promise<void> => {
     const checkedInputValue: number | null = checkInputValue(
       Number(inputValue),
       totalPage
     );
     if (checkedInputValue) {
-      onClick(checkedInputValue);
+      await handlePaginationClick(checkedInputValue);
     }
-  }, [inputValue, totalPage, onClick]);
+  }, [inputValue, totalPage, handlePaginationClick]);
 
   const handleInput = useCallback((e: FormEvent): void => {
     const target = e.target as HTMLInputElement;
@@ -47,7 +50,7 @@ function Pagination({ onClick }: IPaginationProps) {
             <button
               key={id}
               className={classes.pagination__button}
-              onClick={() => onClick(item)}
+              onClick={() => handlePaginationClick(item)}
               disabled={item === currentPage}
             >
               {item}

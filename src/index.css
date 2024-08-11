@@ -1,3 +1,9 @@
 @import "normalize.css";
 @import "assets/styles/reset.css";
 @import "assets/styles/font.css";
+
+#root {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+}

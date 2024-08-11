@@ -1,6 +1,6 @@
 import Header from "../../components/Header/Header.tsx";
 import { Main } from "../../components/Main/Main.tsx";
-import Layout from "../../components/Layout/Layout.tsx";
+import Wrapper from "../../components/Wrapper/Wrapper.tsx";
 import { Outlet } from "react-router-dom";
 import { Footer } from "../../components/Footer/Footer.tsx";
 import { useSelector } from "react-redux";
@@ -11,13 +11,13 @@ function RootPage() {
     (state: RootState) => state.favoritePokemonList.pokemonList
   );
   return (
-    <Layout>
+    <Wrapper>
       <Header />
       <Main>
         <Outlet />
       </Main>
       {pokemonList.length > 0 && <Footer />}
-    </Layout>
+    </Wrapper>
   );
 }
 

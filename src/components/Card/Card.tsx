@@ -1,4 +1,4 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "@remix-run/react";
 import classes from "./Card.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -14,9 +14,8 @@ interface ICardProps {
   className?: string;
 }
 
-function Card({ name, className }: ICardProps) {
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
+export function Card({ name, className }: ICardProps) {
+  const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useDispatch<AppDispatch>();
   const tokens = useSelector(
     (state: RootState) => state.favoritePokemonList.pokemonList
@@ -26,10 +25,6 @@ function Card({ name, className }: ICardProps) {
   useEffect(() => {
     setIsChecked(tokens.includes(name));
   }, [tokens, name]);
-
-  const path = searchParams
-    ? `/pokemon/${name}?${searchParams}`
-    : `/pokemon/${name}`;
 
   const handleCheckboxClick = (event: FormEvent) => {
     event.stopPropagation();
@@ -41,7 +36,9 @@ function Card({ name, className }: ICardProps) {
   };
 
   const redirect = () => {
-    navigate(path);
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set("pokemon", name);
+    setSearchParams(newSearchParams);
   };
 
   return (
@@ -55,5 +52,3 @@ function Card({ name, className }: ICardProps) {
     </div>
   );
 }
-
-export default Card;

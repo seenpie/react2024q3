@@ -1,12 +1,14 @@
-import Layout from "../../components/Layout/Layout.tsx";
-import { Link } from "react-router-dom";
+import Wrapper from "../../components/Wrapper/Wrapper.tsx";
+import { Link } from "@remix-run/react";
 
 function NotFoundPage() {
   return (
-    <Layout>
+    <Wrapper>
       <div>Not Found</div>
-      <Link to="/">back</Link>
-    </Layout>
+      <Link to="/" reloadDocument>
+        back
+      </Link>
+    </Wrapper>
   );
 }
 

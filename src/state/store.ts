@@ -1,12 +1,10 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { favoritePokemonListSlice } from "./favoritePokemonList/favoritePokemonListSlice.ts";
-import { pageDataSlice } from "./pageData/pageDataSlice.ts";
 import { pokemonApi } from "./pokemonApi.ts";
 import { setupListeners } from "@reduxjs/toolkit/query";
 
 const rootReducer = combineReducers({
   favoritePokemonList: favoritePokemonListSlice.reducer,
-  pageData: pageDataSlice.reducer,
   [pokemonApi.reducerPath]: pokemonApi.reducer
 });
 
