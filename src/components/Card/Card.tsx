@@ -42,12 +42,17 @@ export function Card({ name, className }: ICardProps) {
   };
 
   return (
-    <div className={`${classes.card} ${className}`} onClick={redirect}>
+    <div
+      className={`${classes.card} ${className}`}
+      onClick={redirect}
+      aria-label="card"
+    >
       <span>{name}</span>
       <span
         className={classes.card__checkbox}
         onClick={handleCheckboxClick}
         data-checked={isChecked}
+        aria-label="checkbox"
       />
     </div>
   );
