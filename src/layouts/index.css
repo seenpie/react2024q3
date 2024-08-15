@@ -1,0 +1,8 @@
+@import "@/assets/styles/form.css";
+
+.page {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
