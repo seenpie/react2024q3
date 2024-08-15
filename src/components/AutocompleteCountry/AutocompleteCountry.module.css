@@ -1,0 +1,26 @@
+.wrapper {
+  position: relative;
+}
+
+.countryList {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  overflow: auto;
+  height: 400%;
+  width: 100%;
+
+  > input {
+    border: none;
+    padding: 5px;
+    font-size: inherit;
+    background-color: transparent;
+    text-align: left;
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--primary-color);
+    }
+  }
+}
