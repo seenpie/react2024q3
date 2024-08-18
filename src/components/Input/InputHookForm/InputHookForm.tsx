@@ -2,20 +2,19 @@ import { getAutoCompleteValue } from "@/utils";
 import { FieldValues } from "react-hook-form";
 import { InputProps } from "@/models/types";
 
-export const Input = <T extends FieldValues>({
+export const InputHookForm = <T extends FieldValues>({
   label,
   register,
   errorMessage,
   type,
   options,
-  children,
-  text
+  children
 }: InputProps<T>) => {
   switch (type) {
     case "radio":
       return (
         <label>
-          <span>{text}</span>
+          <span>{label}</span>
           <span>
             {options?.map((option) => (
               <label key={option.value}>
@@ -31,9 +30,9 @@ export const Input = <T extends FieldValues>({
     case "checkbox":
       return (
         <label>
-          <span>{text}</span>
+          <span>{label}</span>
           <span>
-            <input type={type} {...register(label)} />I agree with something
+            <input type={type} {...register(label)} />
           </span>
           {errorMessage && <span>{errorMessage}</span>}
         </label>
@@ -42,7 +41,7 @@ export const Input = <T extends FieldValues>({
     default:
       return (
         <label>
-          <span>{text}</span>
+          <span>{label}</span>
           <input
             type={type}
             {...register(label)}

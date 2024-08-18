@@ -1,26 +1,47 @@
 import { useSelector } from "react-redux";
 import { selectCountries } from "@/store";
-import { ChangeEvent, useState } from "react";
+import { useEffect, useState } from "react";
+import { UseFormWatch } from "react-hook-form";
+import { FormData } from "@/models";
 import classes from "./AutocompleteCountry.module.css";
 
-export const AutocompleteCountry = () => {
-  const countries = useSelector(selectCountries).countries;
+export type AutocompleteCountryProps = {
+  setValue: (value: string) => void;
+  watch?: UseFormWatch<FormData>;
+  value?: string;
+};
+
+export const AutocompleteCountry = ({
+  setValue,
+  watch,
+  value
+}: AutocompleteCountryProps) => {
   const [inputValue, setInputValue] = useState("");
 
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
-  };
+  useEffect(() => {
+    if (watch) {
+      const subscribtion = watch((value) => setInputValue(value.country ?? ""));
 
-  const selectHint = (event: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
+      return () => subscribtion.unsubscribe();
+    }
+    if (value != null) {
+      setInputValue(value);
+    }
+  }, [watch, value]);
+
+  const countries = useSelector(selectCountries).countries;
+
+  const selectHint = (
+    event: React.MouseEvent<HTMLUListElement, MouseEvent>
+  ) => {
+    const target = event.target as HTMLButtonElement;
+    setValue(target.innerText);
   };
 
   return (
-    <div className={classes.wrapper}>
-      <label htmlFor="country">country</label>
-      <input id="country" value={inputValue} onChange={handleInputChange} />
+    <>
       {inputValue && (
-        <form className={classes.countryList} onClick={selectHint}>
+        <ul className={classes.countryList} onClick={selectHint}>
           {countries
             .filter(
               (country) =>
@@ -29,10 +50,12 @@ export const AutocompleteCountry = () => {
                 country !== inputValue
             )
             .map((country) => (
-              <input type="button" value={country} />
+              <li key={country}>
+                <button>{country}</button>
+              </li>
             ))}
-        </form>
+        </ul>
       )}
-    </div>
+    </>
   );
 };

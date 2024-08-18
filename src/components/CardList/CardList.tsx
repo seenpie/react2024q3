@@ -1,9 +1,10 @@
-import { FormData } from "@/models";
+import { FormType, ParsedFormData } from "@/models";
 import { CardItem } from "@/components/CardItem/CardItem.tsx";
+import classes from "./CardList.module.css";
 
 type CardListProps = {
-  cards: FormData[];
-  label: "form hook" | "form uncontrolled";
+  cards: ParsedFormData[];
+  label: FormType;
 };
 
 export const CardList = ({ cards, label }: CardListProps) => {
@@ -12,9 +13,9 @@ export const CardList = ({ cards, label }: CardListProps) => {
   }
 
   return (
-    <div>
-      {cards.map((card) => (
-        <CardItem card={card} />
+    <div className={classes.cardList}>
+      {cards.map((card, index) => (
+        <CardItem key={card.attachment + index} card={card} />
       ))}
     </div>
   );

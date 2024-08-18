@@ -1,90 +1,146 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import "@/index.css";
-import { Input } from "@/components/Input/Input.tsx";
 import { FormData, Genders, yupSchema } from "@/models";
 import { useDispatch } from "react-redux";
 import { AppDispatch, setFormHookData } from "@/store";
-import { parsePictureToString } from "@/utils";
 import { useNavigate } from "react-router-dom";
-import { AutocompleteCountry } from "@/components/AutocompleteCountry/AutocompleteCountry.tsx";
+import { useState } from "react";
+import { InputFile } from "@/components/InputFile/InputFile";
+import { InputPassword } from "@/components/InputPassword/InputPassword";
+import { getAutoCompleteValue } from "@/utils";
+import { InputCountry } from "@/components/InputCountry/InputCountry";
 
 export const FormHookPage = () => {
   const {
     register,
     handleSubmit,
     watch,
-    formState: { errors }
-  } = useForm<FormData>({ resolver: yupResolver(yupSchema) });
+    formState: { errors, isValid },
+    setValue
+  } = useForm<FormData>({
+    resolver: yupResolver(yupSchema),
+    mode: "onChange"
+  });
+
+  const [attachment, setAttachment] = useState<string>("");
 
   const dispatch = useDispatch<AppDispatch>();
-
   const navigate = useNavigate();
 
   const onSubmit = (data: FormData) => {
-    console.log(data);
-    const parsed = parsePictureToString(data.picture[0]);
-    data.picture = parsed;
-    dispatch(setFormHookData(data));
+    const dispatchData = {
+      ...data,
+      attachment
+    };
+    dispatch(setFormHookData(dispatchData));
     navigate("/");
   };
-
-  // console.log(watch("name"));
 
   return (
     <>
       <form className="form" onSubmit={handleSubmit(onSubmit)}>
-        <Input<FormData>
-          type="text"
-          label="name"
-          register={register}
-          errorMessage={errors.name?.message}
-        />
-        <Input
-          type="number"
-          label="age"
-          register={register}
-          errorMessage={errors.age?.message}
-        />
-        <Input
-          type="email"
-          label="email"
-          register={register}
-          errorMessage={errors.email?.message}
-        />
-        <Input
+        <label>
+          <span>name:</span>
+          <input type="text" {...register("name")} />
+          {errors.name?.message && <span>{errors.name?.message}</span>}
+        </label>
+
+        <label>
+          <span>age:</span>
+          <input type="number" {...register("age")} />
+          {errors.age?.message && <span>{errors.age?.message}</span>}
+        </label>
+
+        <label>
+          <span>email:</span>
+          <input
+            type="email"
+            {...register("email")}
+            autoComplete={getAutoCompleteValue("email")}
+          />
+          {errors.email?.message && <span>{errors.email?.message}</span>}
+        </label>
+
+        <InputPassword
+          text="password:"
           type="password"
           label="password"
           register={register}
           errorMessage={errors.password?.message}
+          watch={watch}
         />
-        <Input
-          type="password"
-          label="confirmPassword"
-          register={register}
-          errorMessage={errors.confirmPassword?.message}
-        />
-        <Input
-          type="radio"
-          options={[{ value: Genders.male }, { value: Genders.female }]}
-          label="gender"
-          register={register}
-          errorMessage={errors.gender?.message}
-        />
-        <Input
-          type="checkbox"
-          label="acceptTerms"
-          register={register}
-          errorMessage={errors.acceptTerms?.message}
-        />
-        <Input
+
+        <label>
+          <span>confirm password:</span>
+          <input
+            type="password"
+            autoComplete={getAutoCompleteValue("password")}
+            {...register("confirmPassword")}
+          />
+          {errors.confirmPassword?.message && (
+            <span>{errors.confirmPassword?.message}</span>
+          )}
+        </label>
+
+        <label>
+          <span>gender:</span>
+          <span>
+            <label>
+              <input
+                type="radio"
+                value={Genders.FEMALE}
+                {...register("gender")}
+              />
+              {Genders.FEMALE}
+            </label>
+            <label>
+              <input
+                type="radio"
+                value={Genders.MALE}
+                {...register("gender")}
+              />
+              {Genders.MALE}
+            </label>
+          </span>
+          {errors.gender?.message && <span>{errors.gender?.message}</span>}
+        </label>
+
+        <label>
+          <span>accept terms:</span>
+          <span>
+            <input type="checkbox" {...register("acceptTerms")} />I agree with
+            something
+          </span>
+          {errors.acceptTerms?.message && (
+            <span>{errors.acceptTerms?.message}</span>
+          )}
+        </label>
+
+        <InputFile
+          text="attachment:"
           type="file"
-          label="picture"
+          label="attachment"
           register={register}
-          errorMessage={errors.picture?.message}
+          errorMessage={errors.attachment?.message}
+          callback={setAttachment}
         />
-        <AutocompleteCountry />
-        <button type="submit">submit</button>
+
+        <InputCountry
+          register={register}
+          label="country"
+          type="text"
+          text="country:"
+          watch={watch}
+          errorMessage={errors.country?.message}
+          setValue={(value: string) =>
+            setValue("country", value, { shouldValidate: true })
+          }
+        />
+
+        <button type="submit" disabled={!isValid}>
+          submit
+        </button>
       </form>
     </>
   );
