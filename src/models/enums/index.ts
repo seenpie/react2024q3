@@ -5,6 +5,11 @@ export enum AppRoutes {
 }
 
 export enum Genders {
-  male = "male",
-  female = "female"
+  MALE = "male",
+  FEMALE = "female"
+}
+
+export enum FormType {
+  HOOK_FORM = "hook form",
+  UNCONTROLLED_FORM = "uncontrolled form"
 }
