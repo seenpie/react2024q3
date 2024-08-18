@@ -2,10 +2,16 @@
 @import "@/assets/styles/reset.css";
 @import "@/assets/styles/vars.css";
 
+body {
+  height: 100vh;
+}
+
 #root {
   display: flex;
   flex-direction: column;
+  gap: 10px;
   font-size: 1.4rem;
-  height: 100vh;
   font-family: "Segoe UI", sans-serif;
+  padding: 10px;
+  padding-top: 0;
 }

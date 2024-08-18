@@ -9,7 +9,6 @@ export const MainLayout = () => {
       <main className="page">
         <Outlet />
       </main>
-      <footer>footer</footer>
     </>
   );
 };

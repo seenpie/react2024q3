@@ -14,5 +14,8 @@
   > section {
     flex: 1;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
 }
