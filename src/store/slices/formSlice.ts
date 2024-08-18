@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { FormData, FormState } from "@/models";
+import { createSlice } from "@reduxjs/toolkit";
+import { FormState, FormPayloadAction } from "@/models";
 
 const initialState: FormState = {
   formHook: [],
@@ -10,10 +10,10 @@ export const formSlice = createSlice({
   name: "form",
   initialState,
   reducers: {
-    setFormHookData: (state, action: PayloadAction<FormData>) => {
+    setFormHookData: (state, action: FormPayloadAction) => {
       state.formHook.push(action.payload);
     },
-    setFormUncontrolledData: (state, action: PayloadAction<FormData>) => {
+    setFormUncontrolledData: (state, action: FormPayloadAction) => {
       state.formUncontrolled.push(action.payload);
     }
   }
