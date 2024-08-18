@@ -1,0 +1,38 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8px;
+  gap: 6px;
+  border: 2px solid var(--primary-color);
+  border-radius: 12px;
+  max-width: 100%;
+  width: 400px;
+
+  > label {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    > input {
+      font-size: inherit;
+      border: 1px solid var(--primary-color);
+      border-radius: 6px;
+      outline: none;
+    }
+  }
+
+  > button {
+    font-size: inherit;
+    border: none;
+    background-color: var(--primary-color);
+    border-radius: 6px;
+    height: 40px;
+    cursor: pointer;
+
+    &:hover {
+      filter: grayscale(0.4);
+    }
+  }
+}

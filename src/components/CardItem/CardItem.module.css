@@ -1,0 +1,28 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  border: 2px solid var(--primary-color);
+  border-radius: 8px;
+  width: fit-content;
+  background-color: var(--primary-color-opacity);
+  padding: 5px;
+  width: 300px;
+  overflow: hidden;
+}
+
+.card:last-of-type {
+  border-color: var(--secondary-color);
+  background-color: var(--secondary-color-opacity);
+}
+
+.attachment {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+
+  > img {
+    object-fit: cover;
+    height: 100px;
+  }
+}
