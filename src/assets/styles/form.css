@@ -10,6 +10,7 @@
   width: 400px;
 
   > label {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 6px;
@@ -31,7 +32,7 @@
     cursor: pointer;
 
     &:hover {
-      filter: grayscale(.4);
+      filter: grayscale(0.4);
     }
   }
 }
